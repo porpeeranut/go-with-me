@@ -1,0 +1,24 @@
+add_badge
+
+
+#index
+	login
+		USERNAME,pass
+	regis
+		USERNAME,NAME,EMAIL,pass,profilePic
+#profile
+	USERNAME,NAME,EMAIL,pass,profilePic,score,#edit
+#edit profile
+	NAME,EMAIL,current pass,new pass,re-type new,profilePic
+#user badge
+	pic,score,detail
+#user photo
+	pic,caption,date
+#user photo detail
+	pic,location,time,posture,thing, comment+add comment,like,tag, #edit,delete
+#user photo edit
+	caption
+upload pic
+	caption,tag
+main
+	upload pic,profile,photo,badge+detail,top score user
