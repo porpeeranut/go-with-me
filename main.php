@@ -1,8 +1,12 @@
 <?php
 include_once "config.inc.php";
-
-$option = $_GET["option"];
-$content = file_get_contents($CONFIG["page"]["admin"].$option.".php");
+session_start();
+if ($_SESSION["admin"]=="true") {
+  $option = $_GET["option"];
+  $content = file_get_contents($CONFIG["page"]["admin"].$option.".php");
+} else {
+  $content = file_get_contents($CONFIG["page"]["admin"]."login.php");
+}
 ?>
 <!DOCTYPE html>
 <html lang="en">

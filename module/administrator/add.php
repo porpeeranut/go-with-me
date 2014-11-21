@@ -3,6 +3,13 @@ include_once "../../config.inc.php";
 include_once($CONFIG["inc"]["connect"]);
 include_once($CONFIG["inc"]["function"]);
 
+session_start();
+if ($_SESSION["admin"]!="true") {
+  echo "Fuck You!!!!!";
+  exit;
+}
+
+
 $result["status"] = "failed";
 $result["data"] = "";
 

@@ -2,6 +2,12 @@
 include_once "../../config.inc.php";
 include_once "../connect.php";
 
+session_start();
+if ($_SESSION["admin"]!="true") {
+  echo "Fuck You!!!!!";
+  exit;
+}
+
 $option = $_GET["option"];
 $id = $_GET["id"];
 
