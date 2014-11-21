@@ -1,5 +1,7 @@
 add_badge
 
+#######	git
+add admin login page
 
 #index
 	login

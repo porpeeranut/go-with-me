@@ -1,7 +1,7 @@
 <?php
 include_once "config.inc.php";
 session_start();
-if ($_SESSION["admin"]=="true") {
+if (isset($_SESSION["admin"])=="true") {
   $option = $_GET["option"];
   $content = file_get_contents($CONFIG["page"]["admin"].$option.".php");
 } else {
@@ -65,6 +65,9 @@ if ($_SESSION["admin"]=="true") {
                 <li>
                     <a href="#" id="THING">THING</a>
                 </li>
+                <li>
+                    <a href="#" id="LOGOUT">LOG OUT</a>
+                </li>
             </ul>
         </div>
         <!-- /#sidebar-wrapper -->
@@ -92,25 +95,28 @@ if ($_SESSION["admin"]=="true") {
     <!-- Menu Toggle Script -->
     <script>
         $("#MEMBER").click(function(){
-            window.location.href = 'main.php?option=member';
+            window.location.href = 'admin.php?option=member';
         });
         $("#PHOTO").click(function(){
-            window.location.href = 'main.php?option=photo';
+            window.location.href = 'admin.php?option=photo';
         });
         $("#BADGE").click(function(){
-            window.location.href = 'main.php?option=badge';
+            window.location.href = 'admin.php?option=badge';
         });
         $("#LOCATION").click(function(){
-            window.location.href = 'main.php?option=location';
+            window.location.href = 'admin.php?option=location';
         });
         $("#TIMING").click(function(){
-            window.location.href = 'main.php?option=timing';
+            window.location.href = 'admin.php?option=timing';
         });
         $("#POSTURE").click(function(){
-            window.location.href = 'main.php?option=posture';
+            window.location.href = 'admin.php?option=posture';
         });
         $("#THING").click(function(){
-            window.location.href = 'main.php?option=thing';
+            window.location.href = 'admin.php?option=thing';
+        });
+        $("#LOGOUT").click(function(){
+            window.location.href = "<?=$CONFIG["module"]["admin"]?>logout.php";
         });
 
         $("#menu-toggle").click(function(e) {

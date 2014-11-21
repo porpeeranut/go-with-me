@@ -13,4 +13,5 @@ if ($user==$CONFIG["admin"]["username"] && $pass==$CONFIG["admin"]["password"]) 
   $result["status"] = "failed";
   $result["data"] = "Wrong Username or Password";
 }
+echo json_encode($result);
 ?>
