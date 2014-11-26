@@ -15,7 +15,7 @@
                 <label for="exampleInputPassword1">Password</label>
                 <input type="password" class="form-control" name="pass">
             </div>
-            <button id="submit" class="btn btn-default">Submit</button>
+            <button id="submit" class="btn btn-default">Login</button>
         </form>
     </div>
     <div class="col-lg-6">
@@ -42,7 +42,7 @@
             </div>
             <div class="form-group">
                 <label>Profile Picture</label>
-                <input id="pic" type="file" class="filestyle" name="pic">
+                <input id="pic" type="file" class="filestyle" name="image">
             </div>
             <button id="submit" class="btn btn-default">Submit</button>
         </form>
@@ -61,6 +61,7 @@
         });
         $('#register').attr("action", "module/frontend/register.php");
         $('#register').ajaxForm(function(result) {
+            alert(result);
             var obj = jQuery.parseJSON(result);
             if (obj.status == "success")
                 window.location.href = 'main.php?option=home';

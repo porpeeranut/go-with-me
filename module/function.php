@@ -8,7 +8,8 @@ function getFileType($name) {
 }
 
 function clean($variable) {
-   return strip_tags(mysql_real_escape_string(trim($variable)));
+	$variable = str_replace("'","",$variable);
+   return strip_tags(trim($variable));
 }
 
 function email($email) {

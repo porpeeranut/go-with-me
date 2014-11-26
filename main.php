@@ -1,7 +1,7 @@
 <?php
 include_once "config.inc.php";
 session_start();
-if (isset($_SESSION["admin"])=="true") {
+if (isset($_SESSION["login"])=="true") {
   $option = $_GET["option"];
   $content = file_get_contents($CONFIG["page"]["frontend"].$option.".php");
 } else {
