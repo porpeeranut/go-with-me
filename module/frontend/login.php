@@ -13,13 +13,15 @@ $r = oci_execute($stid);
 $result["status"] = "failed";
 $result["data"] = "Username or Password Failed";
 
-if ($r) {
-  $result["status"] = "success"
+$n = oci_fetch_all($stid, $row, null, null, OCI_FETCHSTATEMENT_BY_ROW);
+
+if ($r && $n==1) {
+  $result["status"] = "success";
   $result["data"] = "";
-  $row = oci_fetch_array($stid, OCI_ASSOC);
+  
   session_start();
   $_SESSION["login"] = "true";
-  $_SESSION["id"] = $row["id"];
+  $_SESSION["id"] = $row[0]["ID"];
 }
 
 echo json_encode($result);

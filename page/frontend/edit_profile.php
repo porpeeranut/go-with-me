@@ -1,11 +1,11 @@
 <div class="row">
     <div class="col-lg-12">
-        <h1 class="page-header">Member</h1>
+        <h1 class="page-header">Profile</h1>
     </div>
 </div>
 
 <div class="row">
-	<div class="col-md-1">
+    <div class="col-md-1">
     </div>
     <div class="col-md-4">
         <img class="img-responsive" src="http://placehold.it/300x200" alt="">
@@ -22,8 +22,20 @@
                 <input type="text" class="form-control input-sm" id="txtEmail" name="email">
             </div>
             <div class="form-group">
-                <label for="exampleInputEmail1">Score</label>
-                <input type="text" class="form-control input-sm" id="txtScore" name="all_score">
+                <label for="exampleInputEmail1">Current password</label>
+                <input type="password" class="form-control input-sm" id="txtCurPass" name="all_score">
+            </div>
+            <div class="form-group">
+                <label for="exampleInputEmail1">New password</label>
+                <input type="password" class="form-control input-sm" id="txtNewPass" name="all_score">
+            </div>
+            <div class="form-group">
+                <label for="exampleInputEmail1">Re-type password</label>
+                <input type="password" class="form-control input-sm" id="txtRePass" name="all_score">
+            </div>
+            <div class="form-group">
+                <label>Profile Picture</label>
+                <input id="pic" type="file" class="filestyle" name="pic">
             </div>
             <button id="Submit" class="btn btn-default">Submit</button>
         </form>
@@ -38,7 +50,7 @@
 <script>
     var start = 0;
     var n = 8;
-	$(document).ready(function(){
+    $(document).ready(function(){
         id = getUrlParameter('ID');
         user = getUrlParameter('USERNAME');
         name = getUrlParameter('NAME');

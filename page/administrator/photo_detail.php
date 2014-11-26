@@ -41,13 +41,13 @@
         $("#OWNER_ID").html(OWNER_ID);
         $("#DATE_TIME").html(DATE_TIME);
         $("#img").attr("src", "images/photos/"+ID+".jpg");
-        $("#btn_edit").attr("onclick", "window.document.location='main.php?option=edit_photo&ID="+ID+"&CAPTION="+CAPTION+"';");
+        $("#btn_edit").attr("onclick", "window.document.location='admin.php?option=edit_photo&ID="+ID+"&CAPTION="+CAPTION+"';");
         $("#btn_delete").click(function(){
             if (confirm("Confirm")) {
                 $.get("module/administrator/delete.php?option=photo&id="+ID, function(result) {
                     var obj = jQuery.parseJSON(result);
                     if (obj.status == "success")
-                        window.document.location='main.php?option=photo';
+                        window.document.location='admin.php?option=photo';
                     else
                         alert(obj.data);
                 });
@@ -77,7 +77,7 @@
         function showComment(obj) {
             row += '<table class="table table-striped table-hover" id="tb_show"><tbody><tr><th>USERNAME</th><th>MSG</th><th>DATE_TIME</th></tr>';
             for (i=0;i<obj.data.length;i++) {
-                row += '<tr onclick="window.document.location=\'main.php?option=member_detail\';"><td>'+obj.data[i].USERNAME+'</td>'
+                row += '<tr onclick="window.document.location=\'admin.php?option=member_detail\';"><td>'+obj.data[i].USERNAME+'</td>'
                 row += '<td>'+obj.data[i].MSG+'</td>'
                 row += '<td>'+obj.data[i].DATE_TIME+'</td></tr>'
             }
@@ -87,7 +87,7 @@
         function showTable(obj) {
             row += '<table class="table table-striped table-hover" id="tb_show"><tbody><tr><th>USERNAME</th></tr>';
             for (i=0;i<obj.data.length;i++) {
-                row += '<tr onclick="window.document.location=\'main.php?option=member_detail\';"><td>'+obj.data[i].USERNAME+'</td></tr>'
+                row += '<tr onclick="window.document.location=\'admin.php?option=member_detail\';"><td>'+obj.data[i].USERNAME+'</td></tr>'
             }
             row += '</tbody></table></div>';
             init_table('#data_row', row);
