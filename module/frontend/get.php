@@ -107,8 +107,7 @@ else if($table_name=="MEMBER") {
   }
 }
 else if($table_name=="BADGE") {
-  $id = $_GET["id"];
-  $sql = "select * from BADGE where ID=$id";
+  $sql = "select * from BADGE";
   $stid = oci_parse($db_conn, $sql);
   $r = oci_execute($stid);
   if ($r) {
