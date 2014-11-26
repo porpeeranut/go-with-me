@@ -31,7 +31,6 @@ if (in_array($table_name, $curr_table)) {
   if ($r) {
     oci_fetch_all($stid, $result["data"], null, null, OCI_FETCHSTATEMENT_BY_ROW);
     $result["status"] = "success";
-    $result["data"] = "";
   } else {
     $e = oci_error($stid);
     $result["status"] = "failed";
