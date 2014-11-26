@@ -23,7 +23,7 @@ if (!isset($_GET["end"])) $end = 99999999999;
 else $end = $_GET["end"];
 
 $table_name = strtoupper($option);
-$curr_table = array("BADGE", "LOCATION", "TIMING", "POSTURE", "THING");
+$curr_table = array("LOCATION", "TIMING", "POSTURE", "THING");
 if (in_array($table_name, $curr_table)) {
   $sql = "select * from (select a.*, ROWNUM rnum from (select * from $table_name order by id) a where rownum <= $end) where rnum >= $start";
   $stid = oci_parse($db_conn, $sql);
@@ -44,7 +44,7 @@ else if ($table_name=="PHOTO") {
   if ($r) {
     $result["status"] = "success";
     oci_fetch_all($stid, $result["data"], null, null, OCI_FETCHSTATEMENT_BY_ROW);
-    print_r($result["data"]);
+
     $n = count($result["data"]);
     for ($i=0;$i<$n;$i++) {
       $id = $result["data"]["$i"]["ID"];
@@ -101,6 +101,50 @@ else if($table_name=="MEMBER") {
     $stid = oci_parse($db_conn, $sql);
     $r = oci_execute($stid);
     oci_fetch_all($stid, $result["data"]["phogo"], null, null, OCI_FETCHSTATEMENT_BY_ROW);
+  } else {
+    $result["status"] = "failed";
+    $result["data"] = $e["message"];
+  }
+}
+else if($table_name=="BADGE") {
+  $id = $_GET["id"];
+  $sql = "select * from BADGE where ID=$id";
+  $stid = oci_parse($db_conn, $sql);
+  $r = oci_execute($stid);
+  if ($r) {
+    $result["status"] = "success";
+    oci_fetch_all($stid, $result["data"], null, null, OCI_FETCHSTATEMENT_BY_ROW);
+
+    $n = count($result["data"]);
+    for ($i=0;$i<$n;$i++) {
+      $id = $result["data"]["$i"]["ID"];
+      $sql = "select b.ID, b.NAME, b.detail from BADGE_THING a, THING b where a.BADGE_ID=$id and b.ID=a.THING_ID";
+      $stid = oci_parse($db_conn, $sql);
+      $r = oci_execute($stid);
+      oci_fetch_all($stid, $result["data"][$i]["thing"], null, null, OCI_FETCHSTATEMENT_BY_ROW);
+
+      $sql = "select b.ID, b.USERNAME from BADGE_MEMBER a, MEMBER b where a.BADGE_ID=$id and b.ID=a.MEMBER_ID";
+      $stid = oci_parse($db_conn, $sql);
+      $r = oci_execute($stid);
+      oci_fetch_all($stid, $result["data"][$i]["member"], null, null, OCI_FETCHSTATEMENT_BY_ROW);
+
+      $sql = "select b.ID, b.NAME, b.detail from BADGE_TIMING a, TIMING b where a.BADGE_ID=$id and b.ID=a.TIMING_ID";
+      $stid = oci_parse($db_conn, $sql);
+      $r = oci_execute($stid);
+      oci_fetch_all($stid, $result["data"][$i]["timing"], null, null, OCI_FETCHSTATEMENT_BY_ROW);
+
+      $sql = "select b.ID, b.NAME, b.detail from BADGE_POSTURE a, POSTURE b where a.BADGE_ID=$id and b.ID=a.POSTURE_ID";
+      $stid = oci_parse($db_conn, $sql);
+      $r = oci_execute($stid);
+      oci_fetch_all($stid, $result["data"][$i]["posture"], null, null, OCI_FETCHSTATEMENT_BY_ROW);
+
+      $sql = "select b.ID, b.NAME, b.detail from BADGE_LOCATION a, LOCATION b where a.BADGE_ID=$id and b.ID=a.LOCATION_ID";
+      $stid = oci_parse($db_conn, $sql);
+      $r = oci_execute($stid);
+      oci_fetch_all($stid, $result["data"][$i]["location"], null, null, OCI_FETCHSTATEMENT_BY_ROW);
+
+      $result["status"] = "success";
+    }
   } else {
     $result["status"] = "failed";
     $result["data"] = $e["message"];
