@@ -47,7 +47,7 @@ else if ($table_name=="PHOTO") {
     print_r($result["data"]);
     $n = count($result["data"]);
     for ($i=0;$i<$n;$i++) {
-      $id = $result["data"][$i]["ID"];
+      $id = $result["data"]["$i"]["ID"];
       $sql = "select M_ID,MSG,DATE_TIME from COMMENT_PHOTO where P_ID=$id";
       $stid = oci_parse($db_conn, $sql);
       $r = oci_execute($stid);
@@ -69,7 +69,6 @@ else if ($table_name=="PHOTO") {
       oci_fetch_all($stid, $result["data"][$i]["with"], null, null, OCI_FETCHSTATEMENT_BY_ROW);
 
       $result["status"] = "success";
-      $result["data"] = "";
     }
   } else {
     $result["status"] = "failed";
