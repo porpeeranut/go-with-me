@@ -44,6 +44,7 @@ else if ($table_name=="PHOTO") {
   if ($r) {
     $result["status"] = "success";
     oci_fetch_all($stid, $result["data"], null, null, OCI_FETCHSTATEMENT_BY_ROW);
+    print_r($result["data"]);
     $n = count($result["data"]);
     for ($i=0;$i<$n;$i++) {
       $id = $result["data"][$i]["ID"];
