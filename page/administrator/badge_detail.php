@@ -43,13 +43,13 @@
         $("#detail").html(DETAIL);
         $("#logo_img").attr("src", "images/badges/logo_"+ID+".jpg");
         $("#ex_img").attr("src", "images/badges/ex_"+ID+".jpg");
-        $("#btn_edit").attr("onclick", "window.document.location='main.php?option=edit_badge&ID="+ID+"&NAME="+NAME+"&SCORE="+SCORE+"&DETAIL="+DETAIL+"';");
+        $("#btn_edit").attr("onclick", "window.document.location='admin.php?option=edit_badge&ID="+ID+"&NAME="+NAME+"&SCORE="+SCORE+"&DETAIL="+DETAIL+"';");
         $("#btn_delete").click(function(){
             if (confirm("Confirm")) {
                 $.get("module/administrator/delete.php?option=badge&id="+ID, function(result) {
                     var obj = jQuery.parseJSON(result);
                     if (obj.status == "success")
-                        window.document.location='main.php?option=badge';
+                        window.document.location='admin.php?option=badge';
                     else
                         alert(obj.data);
                 });

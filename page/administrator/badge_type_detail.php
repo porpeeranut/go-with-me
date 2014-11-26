@@ -39,7 +39,7 @@
         $("#detail").html(DETAIL);
         $("#img").attr("src", "images/"+TYPE+"/"+ID+".jpg");
         $("#btn_edit").click(function(){
-        	window.document.location='main.php?option=edit_badge_type&ID='+ID+'&NAME='+NAME+'&DETAIL='+DETAIL+'&TYPE='+TYPE;
+        	window.document.location='admin.php?option=edit_badge_type&ID='+ID+'&NAME='+NAME+'&DETAIL='+DETAIL+'&TYPE='+TYPE;
         });
         $("#btn_delete").click(function(){
             if (confirm("Confirm")) {
@@ -55,7 +55,7 @@
                 $.get("module/administrator/delete.php?option="+page+"&id="+ID, function(result) {
                     var obj = jQuery.parseJSON(result);
                     if (obj.status == "success")
-                        window.document.location='main.php?option='+page;
+                        window.document.location='admin.php?option='+page;
                     else
                         alert(obj.data);
                 });

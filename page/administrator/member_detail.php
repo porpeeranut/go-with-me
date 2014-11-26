@@ -69,13 +69,13 @@
             });
         });
         $("#btn_edit").click(function(){
-        	window.document.location='main.php?option=edit_member&ID='+id+'&USERNAME='+user+'&NAME='+name+'&EMAIL='+email+'&ALL_SCORE='+score+'&PROFILE='+profile;
+        	window.document.location='admin.php?option=edit_member&ID='+id+'&USERNAME='+user+'&NAME='+name+'&EMAIL='+email+'&ALL_SCORE='+score+'&PROFILE='+profile;
         });
         function showTable(obj) {
         	row = '<div class="col-lg-12"><h3 id="header">Friend</h3>';
             row += '<table class="table table-striped table-hover" id="tb_show"><tbody><tr><th>ID</th><th>USERNAME</th><th>NAME</th><th>EMAIL</th><th>SCORE</th></tr>';
             for (i=0;i<obj.data.length;i++) {
-                row += '<tr onclick="window.document.location=\'main.php?option=member_detail\';"><td>'+obj.data[i].ID+'</td>'
+                row += '<tr onclick="window.document.location=\'admin.php?option=member_detail\';"><td>'+obj.data[i].ID+'</td>'
                 row += '<td>'+obj.data[i].USERNAME+'</td>'
                 row += '<td>'+obj.data[i].NAME+'</td>'
                 row += '<td>'+obj.data[i].EMAIL+'</td>'

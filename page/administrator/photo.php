@@ -90,7 +90,7 @@ POS_ID*/
                 DATE_TIME = obj.data[i].DATE_TIME;
                 row += '<div class="col-md-3 portfolio-item">';
                 row += '<a href="#">';
-                row += '<img onclick="window.document.location=\'main.php?option=photo_detail&ID='+ID+'&CAPTION='+CAPTION+'&OWNER_ID='+OWNER_ID+'&DATE_TIME='+DATE_TIME+'\';" class="img-responsive" src="images/photos/'+ID+'.jpg" alt="">';
+                row += '<img onclick="window.document.location=\'admin.php?option=photo_detail&ID='+ID+'&CAPTION='+CAPTION+'&OWNER_ID='+OWNER_ID+'&DATE_TIME='+DATE_TIME+'\';" class="img-responsive" src="images/photos/'+ID+'.jpg" alt="">';
                 row += '</a>';
                 row += '<h3>';
                 row += ID;
@@ -112,7 +112,7 @@ POS_ID*/
                     DATE_TIME = obj.data[i].DATE_TIME;
                     row += '<div class="col-md-3 portfolio-item">';
                     row += '<a href="#">';
-                    row += '<img onclick="window.document.location=\'main.php?option=photo_detail&ID='+ID+'&CAPTION='+CAPTION+'&OWNER_ID='+OWNER_ID+'&DATE_TIME='+DATE_TIME+'\';" class="img-responsive" src="images/photos/'+ID+'.jpg" alt="">';
+                    row += '<img onclick="window.document.location=\'admin.php?option=photo_detail&ID='+ID+'&CAPTION='+CAPTION+'&OWNER_ID='+OWNER_ID+'&DATE_TIME='+DATE_TIME+'\';" class="img-responsive" src="images/photos/'+ID+'.jpg" alt="">';
                     row += '</a>';
                     row += '<h3>';
                     row += ID;

@@ -1,7 +1,7 @@
 add_badge
 
-#######	git
-add admin login page
+###### git
+add main page, fix all admin page
 
 #index
 	login
@@ -9,9 +9,10 @@ add admin login page
 	regis
 		USERNAME,NAME,EMAIL,pass,profilePic
 #profile
-	USERNAME,NAME,EMAIL,pass,profilePic,score,#edit
+	USERNAME,NAME,EMAIL,profilePic,score,#edit
 #edit profile
 	NAME,EMAIL,current pass,new pass,re-type new,profilePic
+
 #user badge
 	pic,score,detail
 #user photo
@@ -22,5 +23,8 @@ add admin login page
 	caption
 upload pic
 	caption,tag
-main
-	upload pic,profile,photo,badge+detail,top score user
+home
+	home - top user(name, score),all badge,upload pic,
+	profile,
+	photo,
+	badge

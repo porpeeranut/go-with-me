@@ -23,7 +23,7 @@
 </div>
 
 </br>
-<button id="btn_add" onclick="window.document.location='main.php?option=add&TYPE=thing';" class="btn btn-default">Add</button>
+<button id="btn_add" onclick="window.document.location='admin.php?option=add&TYPE=thing';" class="btn btn-default">Add</button>
 
 <hr>    
 <button id="btn_previous" class="btn btn-default">Previous</button>
@@ -60,7 +60,7 @@
                 DETAIL = obj.data[i].DETAIL;
                 row += '<div class="col-md-3 portfolio-item">';
                 row += '<a href="#">';
-                row += '<img onclick="window.document.location=\'main.php?option=badge_type_detail&TYPE=postures&ID='+ID+'&NAME='+NAME+'&DETAIL='+DETAIL+'\';" class="img-responsive" src="images/things/'+obj.data[i].ID+'.jpg" alt="">';
+                row += '<img onclick="window.document.location=\'admin.php?option=badge_type_detail&TYPE=postures&ID='+ID+'&NAME='+NAME+'&DETAIL='+DETAIL+'\';" class="img-responsive" src="images/things/'+obj.data[i].ID+'.jpg" alt="">';
                 row += '</a>';
                 row += '<h3>';
                 row += obj.data[i].ID;
@@ -81,7 +81,7 @@
                     DETAIL = obj.data[i].DETAIL;
                     row += '<div class="col-md-3 portfolio-item">';
                     row += '<a href="#">';
-                    row += '<img onclick="window.document.location=\'main.php?option=badge_type_detail&TYPE=postures&ID='+ID+'&NAME='+NAME+'&DETAIL='+DETAIL+'\';" class="img-responsive" src="images/things/'+obj.data[i].ID+'.jpg" alt="">';
+                    row += '<img onclick="window.document.location=\'admin.php?option=badge_type_detail&TYPE=postures&ID='+ID+'&NAME='+NAME+'&DETAIL='+DETAIL+'\';" class="img-responsive" src="images/things/'+obj.data[i].ID+'.jpg" alt="">';
                     row += '</a>';
                     row += '<h3>';
                     row += obj.data[i].ID;

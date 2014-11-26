@@ -86,7 +86,7 @@
         $('#add').ajaxForm(function(result) {
             var obj = jQuery.parseJSON(result);
             if (obj.status == "success")
-                window.location.href = "main.php?option=badge";
+                window.location.href = "admin.php?option=badge";
             else
                 alert(obj.data);
         });

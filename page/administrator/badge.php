@@ -24,7 +24,7 @@
 </div>
 
 </br>
-<button id="btn_add" onclick="window.document.location='main.php?option=add_badge';" class="btn btn-default">Add</button>
+<button id="btn_add" onclick="window.document.location='admin.php?option=add_badge';" class="btn btn-default">Add</button>
 
 <hr>    
 <button id="btn_previous" class="btn btn-default">Previous</button>
@@ -62,7 +62,7 @@
                 DETAIL = obj.data[i].DETAIL;
                 row += '<div class="col-md-3 portfolio-item">';
                 row += '<a href="#">';
-                row += '<img onclick="window.document.location=\'main.php?option=badge_detail&ID='+ID+'&NAME='+NAME+'&SCORE='+SCORE+'&DETAIL='+DETAIL+'\';" class="img-responsive img-circle" src="images/badges/logo_'+obj.data[i].ID+'.jpg" alt="">';
+                row += '<img onclick="window.document.location=\'admin.php?option=badge_detail&ID='+ID+'&NAME='+NAME+'&SCORE='+SCORE+'&DETAIL='+DETAIL+'\';" class="img-responsive img-circle" src="images/badges/logo_'+obj.data[i].ID+'.jpg" alt="">';
                 row += '</a>';
                 row += '<h3>';
                 row += ID;
@@ -85,7 +85,7 @@
                     DETAIL = obj.data[i].DETAIL;
                     row += '<div class="col-md-3 portfolio-item">';
                     row += '<a href="#">';
-                    row += '<img onclick="window.document.location=\'main.php?option=badge_detail&ID='+ID+'&NAME='+NAME+'&SCORE='+SCORE+'&DETAIL='+DETAIL+'\';" class="img-responsive img-circle" src="images/badges/logo_'+obj.data[i].ID+'.jpg" alt="">';
+                    row += '<img onclick="window.document.location=\'admin.php?option=badge_detail&ID='+ID+'&NAME='+NAME+'&SCORE='+SCORE+'&DETAIL='+DETAIL+'\';" class="img-responsive img-circle" src="images/badges/logo_'+obj.data[i].ID+'.jpg" alt="">';
                     row += '</a>';
                     row += '<h3>';
                     row += ID;
