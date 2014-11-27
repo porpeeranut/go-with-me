@@ -44,12 +44,12 @@ legend a{
   line-height:21px; 
   font-weight:bold; 
   padding: 3px 6px 3px 6px;
-  border: solid #29447e  1px;
+  border: solid #fff  1px;
   text-decoration: none;
 }
 
 .login-btn:hover {
-  background: #5b74a8;
+  background: #5593AE;###################################################################
   text-decoration: none;
 }
 .signup-btn {

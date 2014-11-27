@@ -10,7 +10,7 @@ Author: http://binarytheme.com
 .user-section {
     margin-top:20px;
     font-size:22px;
-    background-color:#6DB2D0;################
+    background-color:#609EB8;################
 }
 .user-section-inner {
     height: 65px;
@@ -32,10 +32,10 @@ margin-top: 20px;
     }
 .user-info {
     display: block;
-    color:#000!important;
-display: inline-block;
-padding: 15px;
-margin-bottom: 0px
+    color:#FFF!important;
+    display: inline-block;
+    padding: 15px;
+    margin-bottom: 0px
 }
 .user-text-online {
     font-size:18px;

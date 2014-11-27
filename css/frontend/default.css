@@ -1,0 +1,25 @@
+.badge_detail {
+	text-align: center;
+	background-color: white;
+	padding-top: 20px;
+	padding-bottom: 20px;
+	margin-top: 20px;
+	margin-bottom: 30px;
+	border-radius: 25px;
+}
+
+.feed_item {
+	text-align: left;
+	background-color: white;
+	padding-top: 20px;
+	padding-left: 20px;
+	padding-bottom: 20px;
+	margin-top: 20px;
+	margin-bottom: 30px;
+	border-radius: 25px;
+}
+
+#member_detail {
+	font-size: 12px;
+	margin-bottom: 20px;
+}

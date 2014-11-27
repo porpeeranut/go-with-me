@@ -18,63 +18,63 @@
             <input type="text" class="form-control" name="detail">
         </div>
         <div class="form-group">
+            <label>
+                <input id='is_tim' name='is_tim' value='1' type="checkbox">TIMING
+            </label>
+        </div>
+        <div class="form-group">
+            <select id='tim_id' multiple class="form-control" name="tim_id[]">
+            </select>
+        </div>
+        <div class="form-group">
+            <label>
+                <input id='is_pos' name='is_pos' value='1' type="checkbox">POSTURE
+            </label>
+        </div>
+        <div class="form-group">
+            <select id='pos_id' multiple class="form-control" name="pos_id[]">
+            </select>
+        </div>
+        <div class="form-group">
+            <label>
+                <input id='is_loc' name='is_loc' value='1' type="checkbox">LOCATION
+            </label>
+        </div>
+        <div class="form-group">
+            <select id='loc_id' multiple class="form-control" name="loc_id[]">
+            </select>
+        </div>
+        <div class="form-group">
+            <label>
+                <input id='is_thing' name='is_thing' value='1' type="checkbox">THING
+            </label>
+        </div>
+        <div class="form-group">
+            <select id='thing_id' multiple class="form-control" name="thing_id[]">
+            </select>
+        </div>
+        <div class="form-group">
+            <label>
+                <input id='is_mem' name='is_mem' value='1' type="checkbox">MEMBER
+            </label>
+        </div>
+        <div class="form-group">
+            <select id='mem_id' multiple class="form-control" name="mem_id[]">
+            </select>
+        </div>
+        <div class="form-group">
+            <label>
+                <input id='is_score' name='is_score' value='1' type="checkbox">SCORE
+            </label>
+            <input type="text" class="form-control" id="min_score" name="min_score">
+        </div>
+        <div class="form-group">
             <label for="exampleInputPassword1">Badge Picture</label>
             <input id="badge_pic" type="file" class="filestyle" name="badge_pic">
         </div>
         <div class="form-group">
             <label for="exampleInputPassword1">Ex. Picture</label>
             <input id="ex_pic" type="file" class="filestyle" name="ex_pic">
-        </div>
-        <div class="form-group">
-            <label>
-                <input id='is_tim' name='is_tim' type="checkbox">TIMING
-            </label>
-        </div>
-        <div class="form-group">
-            <select id='tim_id' multiple class="form-control" name="tim_id">
-            </select>
-        </div>
-        <div class="form-group">
-            <label>
-                <input id='is_pos' name='is_pos' type="checkbox">POSTURE
-            </label>
-        </div>
-        <div class="form-group">
-            <select id='pos_id' multiple class="form-control" name="pos_id">
-            </select>
-        </div>
-        <div class="form-group">
-            <label>
-                <input id='is_loc' name='is_loc' type="checkbox">LOCATION
-            </label>
-        </div>
-        <div class="form-group">
-            <select id='loc_id' multiple class="form-control" name="loc_id">
-            </select>
-        </div>
-        <div class="form-group">
-            <label>
-                <input id='is_thing' name='is_thing' type="checkbox">THING
-            </label>
-        </div>
-        <div class="form-group">
-            <select id='thing_id' multiple class="form-control" name="thing_id">
-            </select>
-        </div>
-        <div class="form-group">
-            <label>
-                <input id='is_mem' name='is_mem' type="checkbox">MEMBER
-            </label>
-        </div>
-        <div class="form-group">
-            <select id='mem_id' multiple class="form-control" name="mem_id">
-            </select>
-        </div>
-        <div class="form-group">
-            <label>
-                <input id='is_score' name='is_score' type="checkbox">SCORE
-            </label>
-            <input type="text" class="form-control" id="min_score" name="min_score">
         </div>
         <button id="submit" class="btn btn-default">Submit</button>
     </form>
@@ -84,6 +84,7 @@
     $(document).ready(function(event){
         $('#add').attr("action", "module/administrator/add.php?option=badge");
         $('#add').ajaxForm(function(result) {
+            alert(result);
             var obj = jQuery.parseJSON(result);
             if (obj.status == "success")
                 window.location.href = "admin.php?option=badge";
@@ -95,23 +96,23 @@
         $('#mem_id').prop('disabled', 'disabled');
         $('#thing_id').prop('disabled', 'disabled');
         $('#loc_id').prop('disabled', 'disabled');
-        $.get("module/administrator/get.php?option=timing&s=0&n=9", function(result) {
+        $.get("module/administrator/get.php?option=timing&s=0&n=9999", function(result) {
             var obj = jQuery.parseJSON(result);
             showData('#tim_id',obj);
         });
-        $.get("module/administrator/get.php?option=posture&s=0&n=9", function(result) {
+        $.get("module/administrator/get.php?option=posture&s=0&n=9999", function(result) {
             var obj = jQuery.parseJSON(result);
             showData('#pos_id',obj);
         }); 
-        $.get("module/administrator/get.php?option=location&s=0&n=9", function(result) {
+        $.get("module/administrator/get.php?option=location&s=0&n=9999", function(result) {
             var obj = jQuery.parseJSON(result);
             showData('#loc_id',obj);
         });
-        $.get("module/administrator/get.php?option=thing&s=0&n=9", function(result) {
+        $.get("module/administrator/get.php?option=thing&s=0&n=9999", function(result) {
             var obj = jQuery.parseJSON(result);
             showData('#thing_id',obj);
         });
-        $.get("module/administrator/get.php?option=member&s=0&n=9", function(result) {
+        $.get("module/administrator/get.php?option=member&s=0&n=9999", function(result) {
             var obj = jQuery.parseJSON(result);
             showData('#mem_id',obj);
         });
@@ -154,7 +155,7 @@
         function showData(dst, obj) {
             row = "";
             for (i=0;i<obj.data.length;i++) {
-                row += '<option>'+obj.data[i].NAME+'</option>';
+                row += '<option value='+obj.data[i].ID+'>'+obj.data[i].NAME+'</option>';
             }
             init_table(dst, row);
         }
