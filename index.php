@@ -11,6 +11,7 @@
     <meta name="author" content="">
     <title>GoWithMe</title>
     <script src="<?=$CONFIG["javascript"]["admin"]?>jquery-1.11.0.js"></script>
+    <script src="http://malsup.github.com/jquery.form.js"></script>
 
     <link href="<?=$CONFIG["css"]["frontend"]?>bootstrap.css" rel="stylesheet">
     
@@ -28,22 +29,23 @@
               <span class="icon-bar"></span>
               <span class="icon-bar"></span>
             </button>
-            <a class="navbar-brand" href="http://wsnippets.com">.com</a>
+            <a class="navbar-brand" href="#">GoWithMe</a>
           </div>
       <div class="collapse navbar-collapse">
-            <form class="navbar-form navbar-right" id="header-form" role="form">
+        <form class="navbar-form navbar-right" action="" method="post" id="login">
+
           <div class="lt-left">
             <div class="form-group">
-            <label for="exampleInputEmail2">Username</label>
-            <input type="text" class="form-control input-sm" name="user" id="exampleInputEmail2" placeholder="Username">
+              <label for="exampleInputEmail2">Username</label>
+              <input type="text" class="form-control input-sm" name="user" id="exampleInputEmail2" placeholder="Username">
             </div>
             <div class="form-group">
-            <label for="exampleInputPassword2">Password</label>
-            <input type="password" class="form-control input-sm" name="pass" id="exampleInputPassword2" placeholder="Password">
+              <label for="exampleInputPassword2">Password</label>
+              <input type="password" class="form-control input-sm" name="pass" id="exampleInputPassword2" placeholder="Password">
             </div>
-          </div>
-          <div class="lt-right">
-          <button type="submit" class="login-btn">Login</button>
+            <div class="lt-right">
+              <button id="submit" class="login-btn">Login</button>
+            </div>
           </div>
         </form>
             
@@ -54,55 +56,23 @@
     <div class="row">
       <div class="col-md-7">
         <h3 class="slogan">
-          Facebook helps you connect and share with the people in your life.
+          eiei.
         </h3>
         <img src="img/background.png" class="img-responsive" />
       </div>
       <div class="col-md-5">
-      <form action="#" method="post" class="form" role="form">
+        <form action="module/frontend/register.php" method="post" class="form" id="register">
       <legend><a>Create your account</a></legend>
             <h4>It's free and always will be.</h4>
-            <div class="row">
-                <div class="col-xs-6 col-md-6">
-                    <input class="form-control input-lg" name="firstname" placeholder="First Name" type="text" autofocus />
-                </div>
-                <div class="col-xs-6 col-md-6">
-                    <input class="form-control input-lg" name="lastname" placeholder="Last Name" type="text" />
-                </div>
-            </div>
-            <input class="form-control input-lg" name="youremail" placeholder="Your Email" type="email" />
-            <input class="form-control input-lg" name="reenteremail" placeholder="Re-enter Email" type="email" />
-            <input class="form-control input-lg" name="password" placeholder="New Password" type="password" />
-            <label for="">
-                Birth Date</label>
-            <div class="row">
-                <div class="col-xs-4 col-md-4">
-                    <select class="form-control input-lg">
-                        <option value="Month">Month</option>
-                    </select>
-                </div>
-                <div class="col-xs-4 col-md-4">
-                    <select class="form-control input-lg">
-                        <option value="Day">Day</option>
-                    </select>
-                </div>
-                <div class="col-xs-4 col-md-4">
-                    <select class="form-control input-lg">
-                        <option value="Year">Year</option>
-                    </select>
-                </div>
-            </div>
-            <label class="radio-inline">
-                <input type="radio" name="sex" id="inlineCheckbox1" value="male" />
-                Male
-            </label>
-            <label class="radio-inline">
-                <input type="radio" name="sex" id="inlineCheckbox2" value="female" />
-                Female
-            </label>
+            <input class="form-control input-lg" name="user" placeholder="Username" type="text" />
+            <input class="form-control input-lg" name="name" placeholder="Name" type="text" />
+            <input class="form-control input-lg" name="email" placeholder="Email" type="email" />
+            <input class="form-control input-lg" name="pass" placeholder="Password" type="password" />
+            <input class="form-control input-lg" name="repass" placeholder="Re-type Password" type="password" />
+            <label>Profile Picture</label>
+            <input id="pic" type="file" class="filestyle" name="image">
             <br />
-      <span class="help-block">By clicking Create my account, you agree to our Terms and that you have read our Data Use Policy, including our Cookie Use.</span>
-            <button class="btn btn-lg btn-primary btn-block signup-btn" type="submit">
+            <button class="btn btn-lg btn-primary btn-block signup-btn" id="submit">
                 Create my account</button>
             </form>
       
@@ -111,11 +81,27 @@
       </div>
     </div>
 
-    <div id="footer">
-      <div class="container">
-        <p class="text-muted credit"><a href="http://wsnippets.com">WSnippets.com</a></p>
-      </div>
-    </div>
+    <script>
+      $(document).ready(function(event){
+          $('#login').attr("action", "module/frontend/login.php");
+          $('#login').ajaxForm(function(result) {
+              var obj = jQuery.parseJSON(result);
+              if (obj.status == "success")
+                  window.location.href = 'main.php?option=home';
+              else
+                  alert(obj.data);
+          });
+          $('#register').ajaxForm(function(result) {
+              alert(result);
+              var obj = jQuery.parseJSON(result);
+              if (obj.status == "success")
+                  window.location.href = 'main.php?option=home';
+              else
+                  alert(obj.data);
+          });
+      });
+    </script>
 
   </body>
 </html>
+

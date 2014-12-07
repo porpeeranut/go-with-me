@@ -11,7 +11,7 @@ $stid = oci_parse($db_conn, $sql);
 $r = oci_execute($stid);
 
 $result["status"] = "failed";
-$result["data"] = "Username or Password Failed";
+$result["data"] = "Wrong Username or Password";
 
 $n = oci_fetch_all($stid, $row, null, null, OCI_FETCHSTATEMENT_BY_ROW);
 
