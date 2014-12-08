@@ -144,9 +144,8 @@ else if ($table_name=="COMMENT") {
   }
 }
 else if ($table_name=="LIKE") {
-  echo $_POST["p_id"];
   $p_id = intval($_POST["p_id"]);
-  $sql = "insert into LIKE_PHOTO values ($m_id, $p_id, systimestamp)";
+  $sql = "insert into LIKE_PHOTO values ($m_id, $p_id)";
   $stid = oci_parse($db_conn, $sql);
   $r = oci_execute($stid);
   if ($r) {

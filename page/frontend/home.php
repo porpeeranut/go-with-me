@@ -24,6 +24,16 @@
 <script>
     var start = 0;
     var n = 8;
+    function sendLike(id) {
+        $.post("module/frontend/add.php?option=like",
+        {
+            p_id:id
+        },
+        function(data,status){
+            alert(data);
+        });
+        return false;
+    }
     $(document).ready(function(){
         $.get("module/frontend/get.php?option=photo&s=0&n="+n, function(result) {
             //alert(result);
@@ -77,7 +87,7 @@
                 row += '</a>';
 
                 //row += '<form action="module/frontend/add.php?option=like" method="post" class="form">';
-                row += '<a href="#" id="like">Like</a>';
+                row += '<a href="javascript:void(0)" id="like" onclick="sendLike('+ID+');">Like</a>';
                 //row += '</form>';
 
                 row += ' · <a href="#">Comment</a>';
@@ -103,42 +113,6 @@
                 init_table('#dlgHead', e.relatedTarget.id);
                 //$(this).find('.danger').attr('href', $(e.relatedTarget).data('href'));
             });
-            /*$("#like").click(function(){
-                window.location.href = 'main.php?option=home';
-            });*/
-            /*$('#like').ajaxForm(function(result) {
-                var obj = jQuery.parseJSON(result);
-                alert(obj);
-                if (obj.status != "success")
-                    alert(obj.data);
-            });*/
-            $("#like").click(function(){
-                $.post("module/frontend/add.php?option=like",
-                {
-                    p_id:document.getElementById("#like").getAttribute("href")
-                },
-                function(data,status){
-                    alert(data);
-                });
-                return false;
-            });
-            /*$('#like').click(function (e){ 
-                e.preventDefault(); // otherwise, it won't wait for the ajax response
-                $link = $(this); // because '$(this)' will be out of scope in your callback
-
-                $.ajax({
-                    type: 'POST',
-                    url: '/gowithme/module/frontend/add.php?option=like',
-                    data: '{p_id=1}',
-                    contentType: 'application/json',
-                    error: function (err) {
-                        alert("error - " + err);
-                    },
-                    success: function (obj) {
-                        alert(obj);
-                    }
-                });
-            });*/
         }
     });
 </script>
