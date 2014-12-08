@@ -24,6 +24,7 @@
 <script>
     var start = 0;
     var n = 8;
+    var myID;
     function sendLike(id) {
         $.post("module/frontend/add.php?option=like",
         {
@@ -31,9 +32,14 @@
         },
         function(data,status){
             alert(data);
+            alert(document.getElementById("#like").innerHTML);
         });
         return false;
     }
+    $.get("module/frontend/get.php?option=member", function(result) {
+        var obj = jQuery.parseJSON(result);
+        myID = obj.data[0].ID;
+    });
     $(document).ready(function(){
         $.get("module/frontend/get.php?option=photo&s=0&n="+n, function(result) {
             //alert(result);
@@ -52,6 +58,7 @@
                 LIKE = obj.data[i].like;
                 TAG = obj.data[i].tag;
                 WITH = obj.data[i].with;
+                LIKED = false;
                 row += '<div class="col-md-6 portfolio-item">';
                 row += '<div class="feed_item">';
                 row += '<div class="row">';
@@ -83,11 +90,22 @@
                 row += '</br>'+CAPTION+'';
                 row += '</br></br>';
                 row += '<a href="#">';
-                row += '<img width="400" height="400" onclick="" class="img-rounded" src="images/photos/'+ID+'.jpg" alt="" hspace="0">';
+                row += '<img width="400" onclick="" class="img-rounded" src="images/photos/'+ID+'.jpg" alt="" hspace="0">';
                 row += '</a>';
 
                 //row += '<form action="module/frontend/add.php?option=like" method="post" class="form">';
-                row += '<a href="javascript:void(0)" id="like" onclick="sendLike('+ID+');">Like</a>';
+
+                for (j=0;j < LIKE.length;j++) {
+                    if (LIKE[j].ID == myID) {
+                        LIKED = true;
+                        break;
+                    }
+                }
+                if (LIKED) {
+                    row += '<a href="javascript:void(0)" id="like" onclick="sendLike('+ID+');">Unlike</a>';
+                } else {
+                    row += '<a href="javascript:void(0)" id="like" onclick="sendLike('+ID+');">Like</a>';
+                }
                 //row += '</form>';
 
                 row += ' · <a href="#">Comment</a>';
