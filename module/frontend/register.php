@@ -9,14 +9,8 @@ $repass = md5($_POST["repass"]);
 $name = clean($_POST["name"]);
 $email = clean($_POST["email"]);
 $all_score = 0;
-$h_im = (isset($_FILES["image"])?1:0);
-if ($h_im) {
-  $image = $_FILES["image"];
-  $profile = getFileType($image["name"]);
-} else {
-  $profile = "no";
-}
-  
+$image = $_FILES["image"];
+$profile = getFileType($image["name"]);
 
 $result["status"] = "failed";
 if (strlen($username)<=4 || strlen($_POST["pass"])<=4) {
@@ -31,7 +25,7 @@ else if (email($email)) {
 else if (!in_array($profile, $CONFIG["upload"]["type"])) {
   $result["data"] = "Dont Correct data type of image";
 } else {
-  $sql = "insert into MEMBER values (member_seq.nextval, '$username', '$password', '$name', '$email', $all_score, '$profile', 't')";
+  $sql = "insert into MEMBER values (member_seq.nextval, '$username', '$password', '$name', '$email', $all_score, '$profile')";
   $stid = oci_parse($db_conn, $sql);
   $r = oci_execute($stid);
   if ($r) {
@@ -40,22 +34,14 @@ else if (!in_array($profile, $CONFIG["upload"]["type"])) {
     $row = oci_fetch_assoc($stid);
     $id = $row['ID'];
 
-    $up = 1;
-
-    if ($h_im) {
-      $target_dir = $CONFIG["path"]["root"]."/".$CONFIG["image"]["member"];
-      $im = $target_dir.$id.".".$profile;
-      if (!move_uploaded_file($image["tmp_name"], $im)) {
-        $result["data"] = "Image Error";
-        $up = 0;
-      }
-    }
-
-    if ($up) {
+    $target_dir = $CONFIG["path"]["root"]."/".$CONFIG["image"]["member"];
+    $im = $target_dir.$id.".".$profile;
+    if (!move_uploaded_file($image["tmp_name"], $im)) {
+      $result["data"] = "Image Error";
+    } else {
       $result["status"] = "success";
       $result["data"] = "";
     }
-    
   } else {
     $result["data"] = "Can't Register";
   }

@@ -1,12 +1,7 @@
-logo
-profile pic
-search
-## new feed
-	upload pic
-## badge
-	show detail
-## top rank
-	show detail
+add_badge
+
+###### git
+add main page, fix all admin page
 
 #index
 	login

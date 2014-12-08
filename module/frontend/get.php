@@ -48,29 +48,22 @@ else if ($table_name=="PHOTO") {
     $n = count($result["data"]);
     for ($i=0;$i<$n;$i++) {
       $id = $result["data"]["$i"]["ID"];
-      $owner = $result["data"]["$i"]["OWNER_ID"];
-
-      $sql = "select * from MEMBER where ID=$owner";
-      $stid = oci_parse($db_conn, $sql);
-      $r = oci_execute($stid);
-      oci_fetch_all($stid, $result["data"][$i]["owner"], null, null, OCI_FETCHSTATEMENT_BY_ROW);
-
-      $sql = "select b.ID, b.USERNAME, a.MSG, a.DATE_TIME from COMMENT_PHOTO a, MEMBER b where a.P_ID=$id and a.M_ID=b.ID";
+      $sql = "select M_ID,MSG,DATE_TIME from COMMENT_PHOTO where P_ID=$id";
       $stid = oci_parse($db_conn, $sql);
       $r = oci_execute($stid);
       oci_fetch_all($stid, $result["data"][$i]["comment"], null, null, OCI_FETCHSTATEMENT_BY_ROW);
 
-      $sql = "select b.ID, b.USERNAME from LIKE_PHOTO a, MEMBER b where a.P_ID=$id and a.M_ID=b.ID";
+      $sql = "select M_ID from LIKE_PHOTO where P_ID=$id";
       $stid = oci_parse($db_conn, $sql);
       $r = oci_execute($stid);
       oci_fetch_all($stid, $result["data"][$i]["like"], null, null, OCI_FETCHSTATEMENT_BY_ROW);
 
-      $sql = "select b.ID, b.USERNAME from TAG a, MEMBER b where a.P_ID=$id and a.M_ID=b.ID";
+      $sql = "select M_ID from TAG where P_ID=$id";
       $stid = oci_parse($db_conn, $sql);
       $r = oci_execute($stid);
       oci_fetch_all($stid, $result["data"][$i]["tag"], null, null, OCI_FETCHSTATEMENT_BY_ROW);
 
-      $sql = "select b.ID, b.NAME from PHOTO_WITH a, THING b where a.PHOTO_ID=$id and a.THING_ID=b.ID";
+      $sql = "select THING_ID from PHOTO_WITH where PHOTO_ID=$id";
       $stid = oci_parse($db_conn, $sql);
       $r = oci_execute($stid);
       oci_fetch_all($stid, $result["data"][$i]["with"], null, null, OCI_FETCHSTATEMENT_BY_ROW);
@@ -151,18 +144,6 @@ else if($table_name=="BADGE") {
 
       $result["status"] = "success";
     }
-  } else {
-    $result["status"] = "failed";
-    $result["data"] = $e["message"];
-  }
-}
-else if($table_name=="TOPUSER") {
-  $sql = "select * from MEMBER where rownum<=10 order by ALL_SCORE DESC";
-  $stid = oci_parse($db_conn, $sql);
-  $r = oci_execute($stid);
-  if ($r) {
-    $result["status"] = "success";
-    oci_fetch_all($stid, $result["data"], null, null, OCI_FETCHSTATEMENT_BY_ROW);
   } else {
     $result["status"] = "failed";
     $result["data"] = $e["message"];

@@ -20,12 +20,17 @@ if ($option=="badge") {
   $name = $_POST["name"];
   $score = intval($_POST["score"]);
   $detail = $_POST["detail"];
-  $is_tim = (isset($_POST["is_tim"])?intval($_POST["is_tim"]):0);
-  $is_pos = (isset($_POST["is_pos"])?intval($_POST["is_pos"]):0);
-  $is_loc = (isset($_POST["is_loc"])?intval($_POST["is_loc"]):0);
-  $is_thing = (isset($_POST["is_thing"])?intval($_POST["is_thing"]):0);
-  $is_mem = (isset($_POST["is_mem"])?intval($_POST["is_mem"]):0);
-  $is_score = (isset($_POST["is_score"])?intval($_POST["is_score"]):0);
+  $is_tim = intval($_POST["is_tim"]);
+  $tim_id = $_POST["tim_id"];
+  $is_pos = intval($_POST["is_pos"]);
+  $pos_id = $_POST["pos_id"];
+  $is_loc = intval($_POST["is_loc"]);
+  $loc_id = $_POST["loc_id"];
+  $is_thing = intval($_POST["is_thing"]);
+  $thing_id = $_POST["thing_id"];
+  $is_mem = intval($_POST["is_mem"]);
+  $mem_id = $_POST["mem_id"];
+  $is_score = intval($_POST["is_score"]);
   $min_score = intval($_POST["min_score"]);
   $sql = "insert into BADGE values (badge_seq.nextval, '$name', '$score', '$detail', $is_loc, $is_tim, $is_mem, $is_pos, $is_thing, $is_score, $min_score)";
   $stid = oci_parse($db_conn, $sql);
@@ -34,7 +39,6 @@ if ($option=="badge") {
   if ($r) {
     $suc = 1;
     if ($is_loc) {
-      $loc_id = $_POST["loc_id"];
       foreach ($loc_id as $id) {
         $sql = "insert into BADGE_LOCATION values (badge_seq.currval, $id)";
         $stid = oci_parse($db_conn, $sql);
@@ -48,7 +52,6 @@ if ($option=="badge") {
       }
     }
     if ($is_pos) {
-      $pos_id = $_POST["pos_id"];
       foreach ($pos_id as $id) {
         $sql = "insert into BADGE_POSTURE values (badge_seq.currval, $id)";
         $stid = oci_parse($db_conn, $sql);
@@ -62,7 +65,6 @@ if ($option=="badge") {
       }
     }
     if ($is_tim) {
-      $tim_id = $_POST["tim_id"];
       foreach ($tim_id as $id) {
         $sql = "insert into BADGE_TIMING values (badge_seq.currval, $id)";
         $stid = oci_parse($db_conn, $sql);
@@ -76,7 +78,6 @@ if ($option=="badge") {
       }
     }
     if ($is_mem) {
-      $mem_id = $_POST["mem_id"];
       foreach ($mem_id as $id) {
         $sql = "insert into BADGE_MEMBER values (badge_seq.currval, $id)";
         $stid = oci_parse($db_conn, $sql);
@@ -90,7 +91,6 @@ if ($option=="badge") {
       }
     }
     if ($is_thing) {
-      $thing_id = $_POST["thing_id"];
       foreach ($thing_id as $id) {
         $sql = "insert into BADGE_THING values (badge_seq.currval, $id)";
         $stid = oci_parse($db_conn, $sql);

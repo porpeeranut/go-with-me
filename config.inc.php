@@ -65,6 +65,6 @@ $CONFIG["web"]["creator"]["email"][2] = "e2";
 
 //Upload File Config
 
-$CONFIG["upload"]["type"] = array('png', 'jpg', 'jpeg', 'no');
+$CONFIG["upload"]["type"] = array('png', 'jpg', 'jpeg');
 
 ?>

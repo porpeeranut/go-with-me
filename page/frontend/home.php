@@ -4,20 +4,6 @@
     </div>
 </div>
 
-<div class="modal fade" id="normal-dialog" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h4 id="dlgHead"></h4>
-            </div>
-            <div class="modal-body" id="dlgTxt"></div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-default" data-dismiss="modal" id="btnClose">Close</button>
-            </div>
-        </div>
-    </div>
-</div>
-
 <div id="user-row" class="row">
 </div>
 
@@ -28,7 +14,6 @@
         $.get("module/frontend/get.php?option=photo&s=0&n="+n, function(result) {
             //alert(result);
             var obj = jQuery.parseJSON(result);
-            //init_table('#user-row', result);
             showData(obj);
         });
         function showData(obj) {
@@ -37,66 +22,36 @@
                 ID = obj.data[i].ID;
                 CAPTION = obj.data[i].CAPTION;
                 NAME = obj.data[i].owner[0].NAME;
-                OWNID = obj.data[i].owner[0].ID;
                 COMMENT = obj.data[i].comment;
                 LIKE = obj.data[i].like;
                 TAG = obj.data[i].tag;
                 WITH = obj.data[i].with;
                 row += '<div class="col-md-6 portfolio-item">';
-                row += '<div class="feed_item">';
-                row += '<div class="row">';
-                row += '<div class="col-md-2">';
-                row += '<img width="50" height="50" onclick="" class="img-rounded" src="images/members/'+OWNID+'.jpg" alt="">';
-                row += '</div>';
-                row += '<div class="col-md-4">';
-                row += '<b>'+NAME+'</b></br>';
-
-                if (TAG.length > 0) {
-                    row += '<a href="#" id="Tag" data-href="'
-                    for (j=0;j < TAG.length;j++) {
-                        row += TAG[j].USERNAME+'<br/>';
-                    }
-                    row += '" data-toggle="modal" data-target="#normal-dialog">Tag</a>';
-                }
-
-                if (WITH.length > 0) {
-                    row += '<a href="#" id="With" data-href="'
-                    for (j=0;j < WITH.length;j++) {
-                        row += WITH[j].NAME+'<br/>';
-                    }
-                    row += '" data-toggle="modal" data-target="#normal-dialog"> With</a>';
-                }
-                
-                row += '</div>';
-                row += '</div>';
-
-                row += '</br>'+CAPTION+'';
-                row += '</br></br>';
-                row += '<a href="#">';
-                row += '<img width="400" height="400" onclick="" class="img-rounded" src="images/photos/'+ID+'.jpg" alt="" hspace="0">';
-                row += '</a>';
-                row += '<a href="#">Like</a>';
-                //row += '<h4>like</h4>';
-                row += ' '+LIKE.length;
-                /*for (j=0;j < LIKE.length;j++) {
-                    row += LIKE[j].USERNAME+'<br/>';
-                }*/
-
-                row += '<a href="#"> Comment</a>';
-                /*if (COMMENT.length > 0)
-                    row += '<h4>comment</h4>';
+                row += '<div class="feed_item"><a href="#">';
+                row += '<img width="200" height="200" onclick="" class="img-rounded" src="images/photos/'+ID+'.jpg" alt="">';
+                row += '</a><h2>';
+                row += CAPTION+'</h2><br/>';
+                row += 'own: '+NAME+'<br/>';
                 for (j=0;j < COMMENT.length;j++) {
                     row += 'user: '+COMMENT[j].USERNAME;
                     row += ' msg: '+COMMENT[j].MSG+'<br/>';
-                }*/
+                }
+                row += '<h4>like</h4>';
+                for (j=0;j < LIKE.length;j++) {
+                    //row += LIKE[j].USERNAME+'<br/>';
+                }
+                row += LIKE.length+'<br/>';
+                row += '<h4>tag</h4>';
+                for (j=0;j < TAG.length;j++) {
+                    row += TAG[j].USERNAME+'<br/>';
+                }
+                row += '<h4>with</h4>';
+                for (j=0;j < WITH.length;j++) {
+                    row += WITH[j].NAME+'<br/>';
+                }
                 row += '</div></div>';
             }
             init_table('#user-row', row);
-            $('#normal-dialog').on('show.bs.modal', function(e) {
-                init_table('#dlgTxt', $(e.relatedTarget).data('href'));
-                init_table('#dlgHead', e.relatedTarget.id);
-                //$(this).find('.danger').attr('href', $(e.relatedTarget).data('href'));
-            });
         }
     });
 </script>
