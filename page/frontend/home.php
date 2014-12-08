@@ -75,7 +75,10 @@
                 row += '<a href="#">';
                 row += '<img width="400" height="400" onclick="" class="img-rounded" src="images/photos/'+ID+'.jpg" alt="" hspace="0">';
                 row += '</a>';
-                row += '<a href="#">Like</a>';
+
+                //row += '<form action="module/frontend/add.php?option=like" method="post" class="form">';
+                row += '<a href="#" id="like">Like</a>';
+                //row += '</form>';
 
                 row += ' · <a href="#">Comment</a>';
                 /*if (COMMENT.length > 0)
@@ -86,7 +89,7 @@
                 }*/
                 if (LIKE.length > 0) {
                     row += ' · <i class="fa fa-thumbs-up fa-fw"></i>';
-                    row += '<a href="#" id="Like" data-href="'
+                    row += '<a href="#" id="LikeList" data-href="'
                     for (j=0;j < LIKE.length;j++) {
                         row += LIKE[j].USERNAME+'<br/>';
                     }
@@ -100,6 +103,42 @@
                 init_table('#dlgHead', e.relatedTarget.id);
                 //$(this).find('.danger').attr('href', $(e.relatedTarget).data('href'));
             });
+            /*$("#like").click(function(){
+                window.location.href = 'main.php?option=home';
+            });*/
+            /*$('#like').ajaxForm(function(result) {
+                var obj = jQuery.parseJSON(result);
+                alert(obj);
+                if (obj.status != "success")
+                    alert(obj.data);
+            });*/
+            $("#like").click(function(){
+                $.post("module/frontend/add.php?option=like",
+                {
+                    p_id:document.getElementById("#like").getAttribute("href")
+                },
+                function(data,status){
+                    alert(data);
+                });
+                return false;
+            });
+            /*$('#like').click(function (e){ 
+                e.preventDefault(); // otherwise, it won't wait for the ajax response
+                $link = $(this); // because '$(this)' will be out of scope in your callback
+
+                $.ajax({
+                    type: 'POST',
+                    url: '/gowithme/module/frontend/add.php?option=like',
+                    data: '{p_id=1}',
+                    contentType: 'application/json',
+                    error: function (err) {
+                        alert("error - " + err);
+                    },
+                    success: function (obj) {
+                        alert(obj);
+                    }
+                });
+            });*/
         }
     });
 </script>

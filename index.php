@@ -61,7 +61,7 @@
         <img src="img/background.png" class="img-responsive" />
       </div>
       <div class="col-md-5">
-        <form action="module/frontend/register.php" method="post" class="form" id="register">
+        <form action="module/frontend/add.php?option=register" method="post" class="form" id="register">
       <legend><a>Create your account</a></legend>
             <h4>It's free and always will be.</h4>
             <input class="form-control input-lg" name="user" placeholder="Username" type="text" />
@@ -92,7 +92,7 @@
                   alert(obj.data);
           });
           $('#register').ajaxForm(function(result) {
-              alert(result);
+              //alert(result);
               var obj = jQuery.parseJSON(result);
               if (obj.status == "success")
                   window.location.href = 'main.php?option=home';

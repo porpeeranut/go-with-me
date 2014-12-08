@@ -13,10 +13,7 @@ function clean($variable) {
 }
 
 function email($email) {
-  if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
-    return 0;
-  }
-  return 1;
+  return !eregi("^[_a-z0-9-]+(\.[_a-z0-9-]+)*@[a-z0-9-]+(\.[a-z0-9-]+)*(\.[a-z]{2,3})$", $email);
 }
 
 ?>

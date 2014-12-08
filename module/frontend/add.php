@@ -7,12 +7,12 @@ $option = $_GET["option"];
 $table_name = strtoupper($option);
 
 session_start();
-if ($_SESSION["login"]!="true" && $table_name!="REGISTER") {
+if ($table_name!="REGISTER" && $_SESSION["login"]!="true" ) {
   echo "Fuck You!!!!!";
   exit;
 }
 
-$m_id = $_SESSION["id"];
+if ($table_name!="REGISTER") $m_id = $_SESSION["id"];
 
 if ($table_name=="REGISTER") {
   $username = clean($_POST["user"]);
@@ -37,7 +37,7 @@ if ($table_name=="REGISTER") {
   else if (!in_array($profile, $CONFIG["upload"]["type"])) {
     $result["data"] = "Dont Correct data type of image";
   } else {
-    $sql = "insert into MEMBER values (member_seq.nextval, '$username', '$password', '$name', '$email', $all_score, '$profile')";
+    $sql = "insert into MEMBER values (member_seq.nextval, '$username', '$password', '$name', '$email', $all_score, '$profile', 'f')";
     $stid = oci_parse($db_conn, $sql);
     $r = oci_execute($stid);
     if ($r) {
@@ -144,6 +144,7 @@ else if ($table_name=="COMMENT") {
   }
 }
 else if ($table_name=="LIKE") {
+  echo $_POST["p_id"];
   $p_id = intval($_POST["p_id"]);
   $sql = "insert into LIKE_PHOTO values ($m_id, $p_id, systimestamp)";
   $stid = oci_parse($db_conn, $sql);
