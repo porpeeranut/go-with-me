@@ -61,10 +61,10 @@ if ($table_name=="REGISTER") {
 }
 else if ($table_name=="PHOTO") {
   $caotion = clean($_POST["caption"]);
-  $owner = $m_id;
-  $loc_id = $_POST["loc_id"];
-  $timing_id = $_POST["timing_id"];
-  $pos_id = $_POST["pos_id"];
+  $owner = intval($m_id);
+  $loc_id = intval($_POST["loc_id"]);
+  $timing_id = intval($_POST["timing_id"]);
+  $pos_id = intval($_POST["pos_id"]);
 
   $sql = "insert into PHOTO values (member_seq.nextval, '$caption', $owner, $loc_id, $timing_id, $pos_id, systimestamp)";
   $stid = oci_parse($db_conn, $sql);
@@ -128,8 +128,8 @@ else if ($table_name=="PHOTO") {
   }
 }
 else if ($table_name=="COMMENT") {
-  $msg = $_POST["msg"];
-  $p_id = $_POST["p_id"];
+  $msg = clean($_POST["msg"]);
+  $p_id = intval($_POST["p_id"]);
 
   $sql = "insert into COMMENT_PHOTO values (comment_photo_seq.nextval, $m_id, $p_id, '$msg', systimestamp)";
   $stid = oci_parse($db_conn, $sql);
@@ -144,7 +144,7 @@ else if ($table_name=="COMMENT") {
   }
 }
 else if ($table_name=="LIKE") {
-  $p_id = $_POST["p_id"];
+  $p_id = intval($_POST["p_id"]);
   $sql = "insert into LIKE_PHOTO values ($m_id, $p_id, systimestamp)";
   $stid = oci_parse($db_conn, $sql);
   $r = oci_execute($stid);
@@ -158,8 +158,8 @@ else if ($table_name=="LIKE") {
   }
 }
 else if ($table_name=="MESSAGE") {
-  $to = $_POST["to"];
-  $msg = $_POST["msg"];
+  $to = intval($_POST["to"]);
+  $msg = clean($_POST["msg"]);
   $sql = "insert into MESSAGE values (message.nextval, $m_id, $to, msg, systimestamp)";
   $stid = oci_parse($db_conn, $sql);
   $r = oci_execute($stid);
