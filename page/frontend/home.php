@@ -22,6 +22,20 @@
     </div>
 </div>
 
+<div class="modal fade" id="comment-dialog" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 id="dlgHeadComment"></h4>
+            </div>
+            <div class="modal-body" id="dlgTxtComment"></div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal" id="btnClose">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+
 <div id="user-row" class="row">
 </div>
 
@@ -148,21 +162,22 @@
                 }
                 //row += '</form>';
 
-                row += ' · <a href="#">Comment</a>';
+                //row += ' · <a href="#">Comment</a>';
                 /*if (COMMENT.length > 0)
                     row += '<h4>comment</h4>';
                 for (j=0;j < COMMENT.length;j++) {
                     row += 'user: '+COMMENT[j].USERNAME;
                     row += ' msg: '+COMMENT[j].MSG+'<br>';
                 }*/
-                if (LIKE.length > 0) {
-                    row += ' · <i class="fa fa-thumbs-up fa-fw"></i>';
-                    row += '<a href="#" id="LikeList'+ID+'" data-href="'
-                    for (j=0;j < LIKE.length;j++) {
-                        row += LIKE[j].USERNAME+'<br>';
-                    }
-                    row += '" data-toggle="modal" data-target="#normal-dialog">'+LIKE.length+' people</a> like this.';
+                row += ' · <a href="#" id="comment'+ID+'" data-href="'+ID;
+                row += '" data-toggle="modal" data-target="#comment-dialog">Comment</a>';
+
+                row += ' · <i class="fa fa-thumbs-up fa-fw"></i>';
+                row += '<a href="#" id="LikeList'+ID+'" data-href="'
+                for (j=0;j < LIKE.length;j++) {
+                    row += LIKE[j].USERNAME+'<br>';
                 }
+                row += '" data-toggle="modal" data-target="#normal-dialog">'+LIKE.length+' people</a> like this.';
                 row += '</div></div>';
             }
             init_table('#user-row', row);
@@ -172,6 +187,42 @@
                 if (head.indexOf("Like") != -1)
                     head = 'Like';
                 init_table('#dlgHead', head);
+                //$(this).find('.danger').attr('href', $(e.relatedTarget).data('href'));
+            });
+            $('#comment-dialog').on('show.bs.modal', function(e) {
+                $.get("module/frontend/get.php?option=photo", function(result) {
+                    var obj = jQuery.parseJSON(result);
+                    row = "";
+                    id = $(e.relatedTarget).attr('data-href');
+                    noComment = true;
+                    for (i=0;i < obj.data.length;i++) {
+                        if (id == obj.data[i].ID) {
+                            COMMENT = obj.data[i].comment;
+                            for (j=0;j < COMMENT.length;j++) {
+                                row += '<div class="row">';
+                                row += '<div class="col-md-2">';
+                                row += '<img width="40" height="40" style="margin-top: 3px;margin-left: 40px;" onclick="" class="img-rounded" src="images/members/'+COMMENT[j].ID+'.jpg" alt="">';
+                                row += '</div>';
+                                row += '<div class="col-md-6">';
+                                row += '<b>'+COMMENT[j].USERNAME+'</b><br>';
+                                row += COMMENT[j].MSG+'<br>';
+                                row += '</div>';
+                                row += '</div>';
+                            }
+                            if (COMMENT.length != 0)
+                                noComment = false;
+                            break;
+                        }
+                    }
+                    if (noComment)
+                        row += 'No comment';
+                    init_table('#dlgTxtComment', row);
+                });
+                
+                head = e.relatedTarget.id;
+                if (head.indexOf("comment") != -1)
+                    head = 'Comment';
+                init_table('#dlgHeadComment', head);
                 //$(this).find('.danger').attr('href', $(e.relatedTarget).data('href'));
             });
         }
