@@ -71,17 +71,20 @@
         }
         return false; 
     }
-    function sendUnlike(id) {
+    function sendComment(id) {
+        //alert($('#commentText').val());
         //alert(id);
-        $.get("module/frontend/delete.php?option=like&p_id="+id, function(result) {
-            alert(result);
-            //var obj = jQuery.parseJSON(result);
-            $('#unlike').html("Like");
-            likeNum = $('#LikeList'+id).html().split(" ")[0];
-            $('#LikeList'+id).html((parseInt(likeNum)-1)+' '+$('#LikeList'+id).html().split(" ")[1]);
-        });
-
-        return false;
+        if ($('#commentText').val() != '') {
+            $.post("module/frontend/add.php?option=comment",
+            {
+                p_id:id,
+                msg:$('#commentText').val()
+            },
+            function(result,status){
+                alert(result);
+            });
+        }
+        return false; 
     }
     $.get("module/frontend/get.php?option=member", function(result) {
         var obj = jQuery.parseJSON(result);
@@ -156,7 +159,6 @@
                 }
                 if (LIKED) {
                     row += '<a href="javascript:void(0)" id="like'+ID+'" onclick="sendLike('+ID+');">Unlike</a>';
-                    //row += '<a href="javascript:void(0)" id="unlike" onclick="sendUnlike('+ID+');">Unlike</a>';
                 } else {
                     row += '<a href="javascript:void(0)" id="like'+ID+'" onclick="sendLike('+ID+');">Like</a>';
                 }
@@ -194,7 +196,7 @@
                     var obj = jQuery.parseJSON(result);
                     row = "";
                     id = $(e.relatedTarget).attr('data-href');
-                    noComment = true;
+                    //noComment = true;
                     for (i=0;i < obj.data.length;i++) {
                         if (id == obj.data[i].ID) {
                             COMMENT = obj.data[i].comment;
@@ -209,13 +211,34 @@
                                 row += '</div>';
                                 row += '</div>';
                             }
-                            if (COMMENT.length != 0)
-                                noComment = false;
+                            /*if (COMMENT.length != 0)
+                                noComment = false;*/
                             break;
                         }
                     }
-                    if (noComment)
-                        row += 'No comment';
+                    /*if (noComment)
+                        row += 'No comment';*/
+
+                    row += '<div class="row">';
+                    row += '<div class="col-md-2">';
+                    row += '<img width="40" height="40" style="margin-top: 3px;margin-left: 40px;" onclick="" class="img-rounded" src="images/members/'+myID+'.jpg" alt="">';
+                    row += '</div>';
+                    row += '<div class="col-md-10">';
+
+                    row += '<div class="input-group custom-search-form" style="margin-top: 5px;">';
+                    row += '<input type="text" id="commentText" class="form-control" placeholder="Write a comment...">';
+                    row += '<span class="input-group-btn">';
+                    row += '<button id="commentBtn" onclick="sendComment('+id+');" class="btn btn-default" type="button">';
+                    //row += '<i class="fa fa-search"></i>Comment';
+                    row += 'Comment';
+                    row += '</button>';
+                    row += '</span>';
+                    row += '</div>';
+                    /*row += '<b>'+COMMENT[j].USERNAME+'</b><br>';
+                    row += COMMENT[j].MSG+'<br>';*/
+                    row += '</div>';
+                    row += '</div>';
+
                     init_table('#dlgTxtComment', row);
                 });
                 
