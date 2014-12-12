@@ -71,20 +71,74 @@
         }
         return false; 
     }
-    function sendComment(id) {
+    function sendComment(pid) {
         //alert($('#commentText').val());
         //alert(id);
         if ($('#commentText').val() != '') {
             $.post("module/frontend/add.php?option=comment",
             {
-                p_id:id,
+                p_id:pid,
                 msg:$('#commentText').val()
             },
             function(result,status){
-                alert(result);
+                $('#commentText').val("");
+                loadComment(pid);
             });
         }
         return false; 
+    }
+    function loadComment(p_id) {
+        $.get("module/frontend/get.php?option=photo", function(result) {
+                    var obj = jQuery.parseJSON(result);
+                    row = "";
+                    //noComment = true;
+                    for (i=0;i < obj.data.length;i++) {
+                        if (p_id == obj.data[i].ID) {
+                            COMMENT = obj.data[i].comment;
+                            for (j=0;j < COMMENT.length;j++) {
+                                row += '<div class="row">';
+                                row += '<div class="col-md-2">';
+                                row += '<img width="40" height="40" style="margin-top: 3px;margin-left: 40px;" onclick="" class="img-rounded" src="images/members/'+COMMENT[j].ID+'.jpg" alt="">';
+                                row += '</div>';
+                                row += '<div class="col-md-6">';
+                                row += '<b>'+COMMENT[j].USERNAME+'</b><br>';
+                                row += COMMENT[j].MSG+'<br>';
+                                row += '</div>';
+                                row += '</div>';
+                            }
+                            /*if (COMMENT.length != 0)
+                                noComment = false;*/
+                            break;
+                        }
+                    }
+                    /*if (noComment)
+                        row += 'No comment';*/
+
+                    row += '<div class="row">';
+                    row += '<div class="col-md-2">';
+                    row += '<img width="40" height="40" style="margin-top: 3px;margin-left: 40px;" onclick="" class="img-rounded" src="images/members/'+myID+'.jpg" alt="">';
+                    row += '</div>';
+                    row += '<div class="col-md-10">';
+
+                    row += '<div class="input-group custom-search-form" style="margin-top: 5px;">';
+                    row += '<input type="text" id="commentText" class="form-control" placeholder="Write a comment...">';
+                    row += '<span class="input-group-btn">';
+                    row += '<button id="commentBtn" onclick="sendComment('+p_id+');" class="btn btn-default" type="button">';
+                    //row += '<i class="fa fa-search"></i>Comment';
+                    row += 'Comment';
+                    row += '</button>';
+                    row += '</span>';
+                    row += '</div>';
+                    /*row += '<b>'+COMMENT[j].USERNAME+'</b><br>';
+                    row += COMMENT[j].MSG+'<br>';*/
+                    row += '</div>';
+                    row += '</div>';
+
+                    init_table('#dlgTxtComment', row);
+                });
+                head = 'Comment';
+                init_table('#dlgHeadComment', head);
+                //$(this).find('.danger').attr('href', $(e.relatedTarget).data('href'));
     }
     $.get("module/frontend/get.php?option=member", function(result) {
         var obj = jQuery.parseJSON(result);
@@ -192,61 +246,7 @@
                 //$(this).find('.danger').attr('href', $(e.relatedTarget).data('href'));
             });
             $('#comment-dialog').on('show.bs.modal', function(e) {
-                $.get("module/frontend/get.php?option=photo", function(result) {
-                    var obj = jQuery.parseJSON(result);
-                    row = "";
-                    id = $(e.relatedTarget).attr('data-href');
-                    //noComment = true;
-                    for (i=0;i < obj.data.length;i++) {
-                        if (id == obj.data[i].ID) {
-                            COMMENT = obj.data[i].comment;
-                            for (j=0;j < COMMENT.length;j++) {
-                                row += '<div class="row">';
-                                row += '<div class="col-md-2">';
-                                row += '<img width="40" height="40" style="margin-top: 3px;margin-left: 40px;" onclick="" class="img-rounded" src="images/members/'+COMMENT[j].ID+'.jpg" alt="">';
-                                row += '</div>';
-                                row += '<div class="col-md-6">';
-                                row += '<b>'+COMMENT[j].USERNAME+'</b><br>';
-                                row += COMMENT[j].MSG+'<br>';
-                                row += '</div>';
-                                row += '</div>';
-                            }
-                            /*if (COMMENT.length != 0)
-                                noComment = false;*/
-                            break;
-                        }
-                    }
-                    /*if (noComment)
-                        row += 'No comment';*/
-
-                    row += '<div class="row">';
-                    row += '<div class="col-md-2">';
-                    row += '<img width="40" height="40" style="margin-top: 3px;margin-left: 40px;" onclick="" class="img-rounded" src="images/members/'+myID+'.jpg" alt="">';
-                    row += '</div>';
-                    row += '<div class="col-md-10">';
-
-                    row += '<div class="input-group custom-search-form" style="margin-top: 5px;">';
-                    row += '<input type="text" id="commentText" class="form-control" placeholder="Write a comment...">';
-                    row += '<span class="input-group-btn">';
-                    row += '<button id="commentBtn" onclick="sendComment('+id+');" class="btn btn-default" type="button">';
-                    //row += '<i class="fa fa-search"></i>Comment';
-                    row += 'Comment';
-                    row += '</button>';
-                    row += '</span>';
-                    row += '</div>';
-                    /*row += '<b>'+COMMENT[j].USERNAME+'</b><br>';
-                    row += COMMENT[j].MSG+'<br>';*/
-                    row += '</div>';
-                    row += '</div>';
-
-                    init_table('#dlgTxtComment', row);
-                });
-                
-                head = e.relatedTarget.id;
-                if (head.indexOf("comment") != -1)
-                    head = 'Comment';
-                init_table('#dlgHeadComment', head);
-                //$(this).find('.danger').attr('href', $(e.relatedTarget).data('href'));
+                loadComment($(e.relatedTarget).attr('data-href'));
             });
         }
     });
