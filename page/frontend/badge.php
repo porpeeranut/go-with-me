@@ -11,7 +11,7 @@
     var start = 0;
     var n = 8;
     $(document).ready(function(){
-        $.get("module/frontend/get.php?option=badge&s=0&n="+n, function(result) {
+        $.get("module/frontend/get.php?option=badge", function(result) {
             var obj = jQuery.parseJSON(result);
             showData(obj);
         });

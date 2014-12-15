@@ -40,10 +40,76 @@
 
 <div id="feed-row" class="row"></div>
 
-<script>
+<script type="text/javascript">
     var start = 0;
     var n = 8;
     var myID,myName;
+
+    function setPostData(dst, obj) {
+        row = "";
+        /*for (i=0;i<obj.length;i++) {
+            row += '<option selected="selected" value='+obj[i]+'>'+obj[i]+'</option>';
+        }*/
+        if (obj != "None")
+            row += '<option selected="selected" value='+obj+'>'+obj+'</option>';
+        init_table(dst, row);
+    }
+
+    function showTag(table,dst){
+        $.get("module/frontend/get.php?option="+table+"&start=0&end=90", function(result) {
+            mes = result;
+            var obj = jQuery.parseJSON(result);
+            //alert(mes);
+            mes = '<div class="form-group">';
+            mes += '<select id=\'tmp\' class="form-control" name="tmp[]">';
+            mes += '<option value=None>None</option>';
+            //mes += '<option value=CCC style="background-image:url(images/members/13.jpg);">cccc</option>';
+            //mes += '<option value=ZZZ data-content="<img width=\'40\' height=\'40\' style=\'margin-top: 3px;margin-left: 40px;\' class=\'img-rounded\' src=\'images/members/13.jpg\'>">Zz</option>';
+            if (table != "member") {
+                for (i=0;i < obj.data.length;i++) {
+                    mes += '<option value='+obj.data[i].ID+'>'+obj.data[i].NAME+'\t: '+obj.data[i].DETAIL+'</option>';
+                }
+            }
+            mes += '</select>';
+            mes += '</div>';
+            bootbox.dialog({
+                title: table,
+                message: mes,
+                buttons: {
+                    success: {
+                        label: "Ok",
+                        className: "btn-success",
+                        callback: function () {
+                            var answer = $("#tmp").val()
+                            setPostData(dst, answer);
+                        }
+                    }
+                }
+            });
+        });
+    }
+
+    function sendPost() {
+        if ($('#caption').val() != '') {
+            $.post("module/frontend/add.php?option=photo",
+            {
+                caption:$('#caption').val(),
+                loc_id:$('#loc_id').val(),
+                pos_id:$('#pos_id').val(),
+                thing_id:$('#thing_id').val(),
+                timing_id:$('#timing_id').val() 
+            },
+            function(result,status){
+                alert(result);
+                init_table('#upload-row', result);
+            });
+        } else {
+            bootbox.alert("Caption is empty.", function() {
+            });
+        }
+        return false; 
+    }
+
     function sendLike(id) {
         //alert($('#like'+id).html());
         if ($('#like'+id).html() == 'Like') {
@@ -89,8 +155,6 @@
         return false; 
     }
     function deleteComment(pid,commentID) {
-        //alert($('#commentText').val());
-        //alert(pid+','+commentID);
         bootbox.confirm("Are you sure?", function(result) {
             if (result == true) {
                 $.get("module/frontend/delete.php?option=comment&id="+commentID, function(result) {
@@ -115,7 +179,7 @@
                     for (j=0;j < COMMENT.length;j++) {
                         row += '<div class="row">';
                         row += '<div class="col-md-2">';
-                        row += '<img width="40" height="40" style="margin-top: 3px;margin-left: 40px;" onclick="" class="img-rounded" src="images/members/'+COMMENT[j].ID+'.jpg" alt="">';
+                        row += '<img width="40" height="40" style="margin-top: 3px;margin-left: 40px;" onclick="" class="img-rounded" src="images/members/'+COMMENT[j].M_ID+'.jpg" alt="">';
                         row += '</div>';
                         row += '<div class="col-md-8">';
                         row += '<b>'+COMMENT[j].USERNAME+'</b><br>';
@@ -168,6 +232,9 @@
         init_table('#dlgHeadComment', head);
         //$(this).find('.danger').attr('href', $(e.relatedTarget).data('href'));
     }
+
+
+
     $.get("module/frontend/get.php?option=member", function(result) {
         //alert(result);
         var obj = jQuery.parseJSON(result);
@@ -175,7 +242,26 @@
         myName = obj.data[0].NAME;
     });
     $(document).ready(function(){
+
         showUpload();
+
+        $.get("module/frontend/get.php?option=photo&s=0&n="+n, function(result) {
+            //alert(result);
+            //init_table('#upload-row', result);
+            var obj = jQuery.parseJSON(result);
+            showDataFeed(obj);
+        });
+
+        $('#postdata').attr("action", "module/frontend/add.php?option=photo");
+        $('#postdata').ajaxForm(function(result) {
+            alert(result);
+            /*var obj = jQuery.parseJSON(result);
+            if (obj.status == "success")
+                window.location.href = "admin.php?option=badge";
+            else
+                alert(obj.data);*/
+        });
+
         function showUpload() {
             ID=6;
             row="";
@@ -184,7 +270,14 @@
             row += '<b>Upload photo</b>';
             row += '<br><br>';
 
-            row += '<textarea style="width:480px;" rows="2" type="text" id="uploadText" class="form-control" placeholder="Say something about this photo..."></textarea>';
+            row += '<form action="" method="post" enctype="multipart/form-data" id="postdata">';
+
+            /*row += '<div class="form-group">';
+            row += '<label for="exampleInputEmail1">Name</label>';
+            row += '<input type="text" class="form-control" name="name">';
+            row += '</div>';*/
+
+            row += '<textarea name="caption" style="width:480px;" rows="2" type="text" id="caption" class="form-control" placeholder="Say something about this photo..."></textarea>';
             row += '<br>';
 
             /*row += '<a href="#" id="post" data-href="'+ID;
@@ -194,28 +287,49 @@
             row += '<input class="fileInput" type="file" name="file1"/>';
             row += '</div>';*/
 
+            //style="display: none;"
+            row += '<div class="form-group" >';
+            row += '<select id=\'loc_id\' class="form-control" name="loc_id[]">';
+            row += '</select>';
+            row += '</div>';
+
+            row += '<div class="form-group" >';
+            row += '<select id=\'tag_id\' class="form-control" name="tag_id[]">';
+            row += '</select>';
+            row += '</div>';
+
+            row += '<div class="form-group" >';
+            row += '<select id=\'pos_id\' class="form-control" name="pos_id[]">';
+            row += '</select>';
+            row += '</div>';
+
+            row += '<div class="form-group" >';
+            row += '<select id=\'thing_id\' class="form-control" name="thing_id[]">';
+            row += '</select>';
+            row += '</div>';
+
+            row += '<div class="form-group" >';
+            row += '<select id=\'timing_id\' class="form-control" name="timing_id[]">';
+            row += '</select>';
+            row += '</div>';
+
             row += '<input type="file" id="selectedPic" style="display: none;" />';
             row += '<a href="#" onclick="javascript:document.getElementById(\'selectedPic\').click();"><i class="fa fa-camera fa-fw"></i>Photo</a>';
             //row += '<input type="button" value="Browse..." onclick="document.getElementById("selectedFile").click();" />';
+            row += ' · <a href="#" onclick="showTag(\'location\',\'#loc_id\')"><i class="fa fa-map-marker fa-fw"></i>Location</a>';
+            row += ' · <a href="#" onclick="showTag(\'member\',\'#tag_id\')"><i class="fa fa-user fa-fw"></i>Tag</a>';
+            row += ' · <a href="#" onclick="showTag(\'posture\',\'#pos_id\')"><i class="fa fa-user fa-fw"></i>Posture</a>';
+            row += ' · <a href="#" onclick="showTag(\'thing\',\'#thing_id\')"><i class="fa fa-user fa-fw"></i>Thing</a>';
+            row += ' · <a href="#" onclick="showTag(\'timing\',\'#timing_id\')"><i class="fa fa-user fa-fw"></i>Time</a>';
+            row += ' <button id="submit" onclick="sendPost();" class="btn btn-default" type="button">Post</button>';
 
-            row += ' · <a href="#"><i class="fa fa-map-marker fa-fw"></i>Location</a>';
-            row += ' · <a href="#"><i class="fa fa-user fa-fw"></i>Tag</a>';
-            row += ' · <a href="#"><i class="fa fa-user fa-fw"></i>Posture</a>';
-            row += ' · <a href="#"><i class="fa fa-user fa-fw"></i>Thing</a>';
-            row += ' · <a href="#"><i class="fa fa-user fa-fw"></i>Time</a>';
-            row += ' <button id="postBtn" onclick="post(id);" class="btn btn-default" type="button">Post</button>';
+            row += '</form>';
 
             row += '</div></div>';
             init_table('#upload-row', row);
         }
 
-        $.get("module/frontend/get.php?option=photo&s=0&n="+n, function(result) {
-            //alert(result);
-            //init_table('#upload-row', result);
-            var obj = jQuery.parseJSON(result);
-            showData(obj);
-        });
-        function showData(obj) {
+        function showDataFeed(obj) {
             row = "";
             for (i=0;i < obj.data.length;i++) {
                 ID = obj.data[i].ID;
@@ -245,10 +359,10 @@
                     for (j=0;j < TAG.length;j++) {
                         row += TAG[j].USERNAME+'<br>';
                     }
-                    row += '" data-toggle="modal" data-target="#normal-dialog">Tag</a>';
+                    row += '" data-toggle="modal" data-target="#normal-dialog">Tag</a> · ';
                 }
 
-                row += ' · <a href="#" id="Detail" data-href="'
+                row += '<a href="#" id="Detail" data-href="'
                 row += LOC_ID+'<br>';
                 row += TIMING_ID+'<br>';
                 row += POS_ID+'<br>';
