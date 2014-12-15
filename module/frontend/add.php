@@ -7,7 +7,7 @@ $option = $_GET["option"];
 $table_name = strtoupper($option);
 
 session_start();
-if ($table_name!="REGISTER" && $_SESSION["login"]!="true" ) {
+if ($table_name!="REGISTER" and (!isset($_SESSION["login"]) || $_SESSION["login"]!="true")) {
   echo "Fuck You!!!!!";
   exit;
 }

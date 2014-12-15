@@ -4,7 +4,7 @@ include_once($CONFIG["inc"]["connect"]);
 include_once($CONFIG["inc"]["function"]);
 
 session_start();
-if ($_SESSION["login"]!="true") {
+if (!isset($_SESSION["login"]) || $_SESSION["login"]!="true") {
   echo "Fuck You!!!!!";
   exit;
 }
