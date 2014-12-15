@@ -55,14 +55,13 @@
         init_table(dst, row);
     }
 
-    function showTag(table,dst){
+    function showList(table,dst){
         $.get("module/frontend/get.php?option="+table+"&start=0&end=90", function(result) {
             mes = result;
             var obj = jQuery.parseJSON(result);
             //alert(mes);
             mes = '<div class="form-group">';
             mes += '<select id=\'tmp\' class="form-control" name="tmp[]">';
-            mes += '<option value=None>None</option>';
             //mes += '<option value=CCC style="background-image:url(images/members/13.jpg);">cccc</option>';
             //mes += '<option value=ZZZ data-content="<img width=\'40\' height=\'40\' style=\'margin-top: 3px;margin-left: 40px;\' class=\'img-rounded\' src=\'images/members/13.jpg\'>">Zz</option>';
             if (table != "member") {
@@ -316,11 +315,11 @@
             row += '<input type="file" id="selectedPic" style="display: none;" />';
             row += '<a href="#" onclick="javascript:document.getElementById(\'selectedPic\').click();"><i class="fa fa-camera fa-fw"></i>Photo</a>';
             //row += '<input type="button" value="Browse..." onclick="document.getElementById("selectedFile").click();" />';
-            row += ' · <a href="#" onclick="showTag(\'location\',\'#loc_id\')"><i class="fa fa-map-marker fa-fw"></i>Location</a>';
-            row += ' · <a href="#" onclick="showTag(\'member\',\'#tag_id\')"><i class="fa fa-user fa-fw"></i>Tag</a>';
-            row += ' · <a href="#" onclick="showTag(\'posture\',\'#pos_id\')"><i class="fa fa-user fa-fw"></i>Posture</a>';
-            row += ' · <a href="#" onclick="showTag(\'thing\',\'#thing_id\')"><i class="fa fa-user fa-fw"></i>Thing</a>';
-            row += ' · <a href="#" onclick="showTag(\'timing\',\'#timing_id\')"><i class="fa fa-user fa-fw"></i>Time</a>';
+            row += ' · <a href="#" onclick="showList(\'location\',\'#loc_id\')"><i class="fa fa-map-marker fa-fw"></i>Location</a>';
+            row += ' · <a href="#" onclick="showList(\'member\',\'#tag_id\')"><i class="fa fa-user fa-fw"></i>Tag</a>';
+            row += ' · <a href="#" onclick="showList(\'posture\',\'#pos_id\')"><i class="fa fa-user fa-fw"></i>Posture</a>';
+            row += ' · <a href="#" onclick="showList(\'thing\',\'#thing_id\')"><i class="fa fa-user fa-fw"></i>Thing</a>';
+            row += ' · <a href="#" onclick="showList(\'timing\',\'#timing_id\')"><i class="fa fa-user fa-fw"></i>Time</a>';
             row += ' <button id="submit" onclick="sendPost();" class="btn btn-default" type="button">Post</button>';
 
             row += '</form>';
@@ -340,10 +339,23 @@
                 COMMENT = obj.data[i].comment;
                 LIKE = obj.data[i].like;
                 TAG = obj.data[i].tag;
-                WITH = obj.data[i].with;
-                LOC_ID = obj.data[i].LOC_ID;
-                TIMING_ID = obj.data[i].TIMING_ID;
-                POS_ID = obj.data[i].POS_ID;
+                WITH = obj.data[i].thing;
+                if (obj.data[i].location.length != 0)
+                    LOC_ID = obj.data[i].location[0].NAME;
+                else
+                    LOC_ID = '';
+                if (obj.data[i].timing.length != 0)
+                    TIMING_ID = obj.data[i].timing[0].NAME;
+                else
+                    TIMING_ID = '';
+                if (obj.data[i].posture.length != 0)
+                    POS_ID = obj.data[i].posture[0].NAME;
+                else
+                    POS_ID = '';
+                if (obj.data[i].thing.length != 0)
+                    WITH = obj.data[i].thing[0].NAME;
+                else
+                    WITH = '';
                 LIKED = false;
                 row += '<div class="col-md-6 portfolio-item">';
                 row += '<div class="feed_item">';
@@ -363,9 +375,12 @@
                 }
 
                 row += '<a href="#" id="Detail" data-href="'
-                row += LOC_ID+'<br>';
-                row += TIMING_ID+'<br>';
-                row += POS_ID+'<br>';
+                if (LOC_ID != '')
+                    row += LOC_ID+'<br>';
+                if (TIMING_ID != '')
+                    row += TIMING_ID+'<br>';
+                if (POS_ID != '')
+                    row += POS_ID+'<br>';
                 row += WITH+'<br>';
                 row += '" data-toggle="modal" data-target="#normal-dialog">Detail</a>';
 
@@ -377,7 +392,7 @@
                 row += '<br>'+CAPTION+'';
                 row += '<br><br>';
                 row += '<a href="#">';
-                row += '<img width="400" onclick="" class="img-rounded" src="images/photos/'+ID+'.jpg" alt="" hspace="0">';
+                row += '<img width="96%" onclick="" class="img-rounded" src="images/photos/'+ID+'.jpg" alt="" hspace="0">';
                 row += '</a>';
 
                 //row += '<form action="module/frontend/add.php?option=like" method="post" class="form">';

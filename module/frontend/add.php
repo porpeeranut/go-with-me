@@ -15,14 +15,22 @@ if ($table_name!="REGISTER" and (!isset($_SESSION["login"]) || $_SESSION["login"
 if ($table_name!="REGISTER") $m_id = $_SESSION["id"];
 
 if ($table_name=="REGISTER") {
+
+  $im = 0;
+  if (isset($_FILES["image"])) $im=1;
+
   $username = clean($_POST["user"]);
   $password = md5($_POST["pass"]);
   $repass = md5($_POST["repass"]);
   $name = clean($_POST["name"]);
   $email = clean($_POST["email"]);
   $all_score = 0;
-  $image = $_FILES["image"];
-  $profile = getFileType($image["name"]);
+  if ($im) {
+    $image = $_FILES["image"];
+    $profile = getFileType($image["name"]);
+  } else {
+    $profile = "no";
+  }
 
   $result["status"] = "failed";
   if (strlen($username)<=4 || strlen($_POST["pass"])<=4) {
@@ -41,15 +49,20 @@ if ($table_name=="REGISTER") {
     $stid = oci_parse($db_conn, $sql);
     $r = oci_execute($stid);
     if ($r) {
-      $stid = oci_parse($db_conn, "SELECT * FROM member where username='$username'");
-      oci_execute($stid);
-      $row = oci_fetch_assoc($stid);
-      $id = $row['ID'];
+      if ($im) {
+        $stid = oci_parse($db_conn, "SELECT * FROM member where username='$username'");
+        oci_execute($stid);
+        $row = oci_fetch_assoc($stid);
+        $id = $row['ID'];
 
-      $target_dir = $CONFIG["path"]["root"]."/".$CONFIG["image"]["member"];
-      $im = $target_dir.$id.".".$profile;
-      if (!move_uploaded_file($image["tmp_name"], $im)) {
-        $result["data"] = "Image Error";
+        $target_dir = $CONFIG["path"]["root"]."/".$CONFIG["image"]["member"];
+        $im = $target_dir.$id.".".$profile;
+        if (!move_uploaded_file($image["tmp_name"], $im)) {
+          $result["data"] = "Image Error";
+        } else {
+          $result["status"] = "success";
+          $result["data"] = "";
+        }
       } else {
         $result["status"] = "success";
         $result["data"] = "";
@@ -67,17 +80,19 @@ else if ($table_name=="PHOTO") {
   $pos_id = intval($_POST["pos_id"]);
   $thing_id = intval($_POST["thing_id"]);
 
-  $sql = "insert into PHOTO values (member_seq.nextval, '$caption', $owner, $loc_id, $timing_id, $pos_id, $thing_id, systimestamp)";
+  $sql = "insert into PHOTO values (photo_seq.nextval, '$caption', $owner, $loc_id, $timing_id, $pos_id, $thing_id, systimestamp)";
   $stid = oci_parse($db_conn, $sql);
   $r = oci_execute($stid);
 
   if ($r) {
-    $sql = "select b.* from BADGE b, BADGE_COLLECT c where c.MEMBER_ID=$m_id and c.BADGE_ID!=b.ID";
+    $sql = "select * from badge where ID not in (select BADGE_ID from BADGE_COLLECT where MEMBER_ID=$m_id)";
     $stid = oci_parse($db_conn, $sql);
     $r = oci_execute($stid);
     $nb = oci_fetch_all($stid, $badge, null, null, OCI_FETCHSTATEMENT_BY_ROW);
 
-    $sql = "select p.THING_ID, p.LOC_ID, p.TIMING_ID, p.POS_ID, t.M_ID from PHOTO p, TAG t where p.OWNER_ID=$m_id and t.P_ID=p.ID";
+    print_r($badge);
+
+    $sql = "select p.THING_ID, p.LOC_ID, p.TIMING_ID, p.POS_ID from PHOTO p where p.OWNER_ID=$m_id";
     $stid = oci_parse($db_conn, $sql);
     $r = oci_execute($stid);
     oci_fetch_all($stid, $photo, null, null, OCI_FETCHSTATEMENT_BY_COLUMN);
@@ -87,32 +102,34 @@ else if ($table_name=="PHOTO") {
       $sql = "select THING_ID from BADGE_THING where BADGE_ID=$id";
       $stid = oci_parse($db_conn, $sql);
       $r = oci_execute($stid);
-      $nb = oci_fetch_all($stid, $thing, null, null, OCI_FETCHSTATEMENT_BY_ROW);
+      $nb = oci_fetch_all($stid, $thing, null, null, OCI_FETCHSTATEMENT_BY_COLUMN);
 
       $sql = "select MEMBER_ID from BADGE_MEMBER where BADGE_ID=$id";
       $stid = oci_parse($db_conn, $sql);
       $r = oci_execute($stid);
-      $nb = oci_fetch_all($stid, $member, null, null, OCI_FETCHSTATEMENT_BY_ROW);
+      $nb = oci_fetch_all($stid, $member, null, null, OCI_FETCHSTATEMENT_BY_COLUMN);
 
       $sql = "select TIMING_ID from BADGE_TIMING where BADGE_ID=$id";
       $stid = oci_parse($db_conn, $sql);
       $r = oci_execute($stid);
-      $nb = oci_fetch_all($stid, $timing, null, null, OCI_FETCHSTATEMENT_BY_ROW);
+      $nb = oci_fetch_all($stid, $timing, null, null, OCI_FETCHSTATEMENT_BY_COLUMN);
 
       $sql = "select POSTURE_ID from BADGE_POSTURE where BADGE_ID=$id";
       $stid = oci_parse($db_conn, $sql);
       $r = oci_execute($stid);
-      $nb = oci_fetch_all($stid, $posture, null, null, OCI_FETCHSTATEMENT_BY_ROW);
+      $nb = oci_fetch_all($stid, $posture, null, null, OCI_FETCHSTATEMENT_BY_COLUMN);
 
       $sql = "select LOCATION_ID from BADGE_LOCATION where BADGE_ID=$id";
       $stid = oci_parse($db_conn, $sql);
       $r = oci_execute($stid);
-      $nb = oci_fetch_all($stid, $location, null, null, OCI_FETCHSTATEMENT_BY_ROW);
+      $nb = oci_fetch_all($stid, $location, null, null, OCI_FETCHSTATEMENT_BY_COLUMN);
 
-      if (array_intersect($thing, $photo["THING_ID"]) == $thing and
-          array_intersect($member, $photo["M_ID"]) == $member and
-          array_intersect($timing, $photo["TIMING_ID"]) == $timing and
-          array_intersect($posture, $photo["POS_ID"]) == $posture and
+      print_r($thing);
+      print_r(array_intersect($location[0], $photo["LOC_ID"]));
+      if (array_intersect($thing[0], $photo["THING_ID"]) == $thing and
+          //array_intersect($member, $photo["M_ID"]) == $member and
+          array_intersect($timing[0], $photo["TIMING_ID"]) == $timing and
+          array_intersect($posture[0], $photo["POS_ID"]) == $posture and
           array_intersect($location, $photo["LOC_ID"]) == $location) {
 
         $result["data"].push_back($row);

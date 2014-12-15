@@ -92,7 +92,7 @@
                   alert(obj.data);
           });
           $('#register').ajaxForm(function(result) {
-              //alert(result);
+              alert(result);
               var obj = jQuery.parseJSON(result);
               if (obj.status == "success")
                   window.location.href = 'main.php?option=home';

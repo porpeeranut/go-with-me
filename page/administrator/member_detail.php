@@ -48,6 +48,7 @@
             if (start > 0)
                 start -= n;
             $.get("module/administrator/get_child.php?option=photo&id="+id, function(result) {
+                alert(result);
                 var obj = jQuery.parseJSON(result);
                 showPic('Photo', obj);
             });
