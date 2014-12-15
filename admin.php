@@ -14,7 +14,7 @@ if (isset($_SESSION["admin"])=="true") {
 <head>
     <!-- jQuery Version 1.11.0 -->
     <script src="<?=$CONFIG["javascript"]["admin"]?>jquery-1.11.0.js"></script>
-    <script src="http://malsup.github.com/jquery.form.js"></script>
+    <script src="<?=$CONFIG["javascript"]["admin"]?>jquery.form.js"></script>
 
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">

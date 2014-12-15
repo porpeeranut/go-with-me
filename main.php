@@ -16,7 +16,7 @@
     <title><?=$CONFIG["web"]["title"]?></title>
     
     <script src="<?=$CONFIG["javascript"]["admin"]?>jquery-1.11.0.js"></script>
-    <script src="http://malsup.github.com/jquery.form.js"></script>
+    <script src="<?=$CONFIG["javascript"]["admin"]?>jquery.form.js"></script>
 
     <!-- Core CSS - Include with every page -->
     <link href="<?=$CONFIG["css"]["admin"]?>bootstrap.css" rel="stylesheet" />
@@ -40,7 +40,7 @@
                         <!-- user image section-->
                         <div class="user-section">
                             <div class="user-section-inner">
-                                <img src="bs-siminta-admin/bs-siminta-admin/assets/img/user.jpg" alt="">
+                                <img id="profilePic" class="img-rounded" src="" alt="">
                             </div>
                             <div class="user-info">
                                 <div id="member_name"><strong></strong></div>
@@ -109,10 +109,12 @@
     <script>
         $.get("module/frontend/get.php?option=member", function(result) {
             var obj = jQuery.parseJSON(result);
+            ID = obj.data[0].ID;
             name = obj.data[0].NAME;
             username = obj.data[0].USERNAME;
             score = obj.data[0].ALL_SCORE;
             $("#member_name").html("<strong>"+name+"</strong>");
+            $("#profilePic").attr('src', 'images/members/'+ID+'.jpg');
             $("#member_detail").html("<span>@"+username+" ("+score+" score)</span>");
         });
         $("#HOME").click(function(){

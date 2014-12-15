@@ -11,7 +11,7 @@
     <meta name="author" content="">
     <title>GoWithMe</title>
     <script src="<?=$CONFIG["javascript"]["admin"]?>jquery-1.11.0.js"></script>
-    <script src="http://malsup.github.com/jquery.form.js"></script>
+    <script src="<?=$CONFIG["javascript"]["admin"]?>jquery.form.js"></script>
 
     <link href="<?=$CONFIG["css"]["frontend"]?>bootstrap.css" rel="stylesheet">
     
