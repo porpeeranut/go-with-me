@@ -77,7 +77,7 @@ else if ($table_name=="PHOTO") {
     $r = oci_execute($stid);
     $nb = oci_fetch_all($stid, $badge, null, null, OCI_FETCHSTATEMENT_BY_ROW);
 
-    $sql = "select p.LOC_ID, p.TIMING_ID, p.POS_ID, t.M_ID, w.THING_ID from PHOTO p, TAG t, PHOTO_WITH w where p.OWNER_ID=$m_id and t.P_ID=p.ID w.PHOTO_ID=p.ID";
+    $sql = "select p.THING_ID, p.LOC_ID, p.TIMING_ID, p.POS_ID, t.M_ID from PHOTO p, TAG t where p.OWNER_ID=$m_id and t.P_ID=p.ID";
     $stid = oci_parse($db_conn, $sql);
     $r = oci_execute($stid);
     oci_fetch_all($stid, $photo, null, null, OCI_FETCHSTATEMENT_BY_COLUMN);
