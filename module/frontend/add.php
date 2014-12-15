@@ -65,8 +65,9 @@ else if ($table_name=="PHOTO") {
   $loc_id = intval($_POST["loc_id"]);
   $timing_id = intval($_POST["timing_id"]);
   $pos_id = intval($_POST["pos_id"]);
+  $thing_id = intval($_POST["thing_id"]);
 
-  $sql = "insert into PHOTO values (member_seq.nextval, '$caption', $owner, $loc_id, $timing_id, $pos_id, systimestamp)";
+  $sql = "insert into PHOTO values (member_seq.nextval, '$caption', $owner, $loc_id, $timing_id, $pos_id, $thing_id, systimestamp)";
   $stid = oci_parse($db_conn, $sql);
   $r = oci_execute($stid);
 
