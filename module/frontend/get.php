@@ -78,8 +78,7 @@ else if ($table_name=="PHOTO") {
       $stid = oci_parse($db_conn, $sql);
       $r = oci_execute($stid);
       oci_fetch_all($stid, $result["data"][$i]["owner"], null, null, OCI_FETCHSTATEMENT_BY_ROW);
-
-      $sql = "select b.ID, b.USERNAME, a.ID, a.MSG, a.DATE_TIME from COMMENT_PHOTO a, MEMBER b where a.P_ID=$id and a.M_ID=b.ID";
+      $sql = "select b.ID M_ID, b.USERNAME, a.ID C_ID, a.MSG, a.DATE_TIME from COMMENT_PHOTO a, MEMBER b where a.P_ID=$id and a.M_ID=b.ID";
       $stid = oci_parse($db_conn, $sql);
       $r = oci_execute($stid);
       oci_fetch_all($stid, $result["data"][$i]["comment"], null, null, OCI_FETCHSTATEMENT_BY_ROW);

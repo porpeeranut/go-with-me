@@ -90,17 +90,15 @@
     }
     function deleteComment(pid,commentID) {
         //alert($('#commentText').val());
-        //alert(pid);
+        //alert(pid+','+commentID);
         bootbox.confirm("Are you sure?", function(result) {
             if (result == true) {
-                $.post("module/frontend/add.php?option=comment",
-                {
-                    p_id:pid,
-                    msg:$('#commentText').val()
-                },
-                function(result,status){
-                    $('#commentText').val("");
-                    loadComment(pid);
+                $.get("module/frontend/delete.php?option=comment&id="+commentID, function(result) {
+                    var obj = jQuery.parseJSON(result);
+                    if (obj.status == "success")
+                        loadComment(pid);
+                    else
+                        alert(obj.data);
                 });
             }
         }); 
@@ -122,10 +120,11 @@
                         row += '<div class="col-md-8">';
                         row += '<b>'+COMMENT[j].USERNAME+'</b><br>';
                         row += COMMENT[j].MSG+'<br>';
-                        if (COMMENT[j].ID == myID) {
+                        //alert('my '+myID+', com '+COMMENT[j].ID);
+                        if (COMMENT[j].M_ID == myID) {
                             row += '<div align="right"';
                             //row += '<button onclick="deleteComment('+p_id+','+COMMENT[j].COMMENT_ID+');" type="submit" class="btn btn-default btn-xs">';
-                            row += '<button onclick="deleteComment('+p_id+',40);" type="submit" class="btn btn-default btn-xs">';
+                            row += '<button onclick="deleteComment('+p_id+','+COMMENT[j].C_ID+');" type="submit" class="btn btn-default btn-xs">';
                             row += '<i class="fa fa-delete fa-fw"></i>delete';
                             row += '</button>';
                             row += '</div>';
@@ -170,13 +169,10 @@
         //$(this).find('.danger').attr('href', $(e.relatedTarget).data('href'));
     }
     $.get("module/frontend/get.php?option=member", function(result) {
-        alert(result);
-        init_table('#feed-row', result);
-        /*var obj = jQuery.parseJSON(result);
+        //alert(result);
+        var obj = jQuery.parseJSON(result);
         myID = obj.data[0].ID;
-        myName = obj.data[0].NAME;*/
-        myID = 18;
-        myName = sss;
+        myName = obj.data[0].NAME;
     });
     $(document).ready(function(){
         showUpload();
@@ -214,8 +210,8 @@
         }
 
         $.get("module/frontend/get.php?option=photo&s=0&n="+n, function(result) {
-            alert(result);
-            //init_table('#feed-row', result);
+            //alert(result);
+            //init_table('#upload-row', result);
             var obj = jQuery.parseJSON(result);
             showData(obj);
         });
