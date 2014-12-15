@@ -60,7 +60,7 @@ if ($table_name=="REGISTER") {
   }
 }
 else if ($table_name=="PHOTO") {
-  $caotion = clean($_POST["caption"]);
+  $caption = clean($_POST["caption"]);
   $owner = intval($m_id);
   $loc_id = intval($_POST["loc_id"]);
   $timing_id = intval($_POST["timing_id"]);
