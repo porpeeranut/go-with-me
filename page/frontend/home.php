@@ -36,8 +36,9 @@
     </div>
 </div>
 
-<div id="user-row" class="row">
-</div>
+<div id="upload-row" class="row"></div>
+
+<div id="feed-row" class="row"></div>
 
 <script>
     var start = 0;
@@ -87,58 +88,86 @@
         }
         return false; 
     }
+    function deleteComment(pid,commentID) {
+        //alert($('#commentText').val());
+        //alert(pid);
+        bootbox.confirm("Are you sure?", function(result) {
+            if (result == true) {
+                $.post("module/frontend/add.php?option=comment",
+                {
+                    p_id:pid,
+                    msg:$('#commentText').val()
+                },
+                function(result,status){
+                    $('#commentText').val("");
+                    loadComment(pid);
+                });
+            }
+        }); 
+        return false; 
+    }
     function loadComment(p_id) {
         $.get("module/frontend/get.php?option=photo", function(result) {
-                    var obj = jQuery.parseJSON(result);
-                    row = "";
-                    //noComment = true;
-                    for (i=0;i < obj.data.length;i++) {
-                        if (p_id == obj.data[i].ID) {
-                            COMMENT = obj.data[i].comment;
-                            for (j=0;j < COMMENT.length;j++) {
-                                row += '<div class="row">';
-                                row += '<div class="col-md-2">';
-                                row += '<img width="40" height="40" style="margin-top: 3px;margin-left: 40px;" onclick="" class="img-rounded" src="images/members/'+COMMENT[j].ID+'.jpg" alt="">';
-                                row += '</div>';
-                                row += '<div class="col-md-6">';
-                                row += '<b>'+COMMENT[j].USERNAME+'</b><br>';
-                                row += COMMENT[j].MSG+'<br>';
-                                row += '</div>';
-                                row += '</div>';
-                            }
-                            /*if (COMMENT.length != 0)
-                                noComment = false;*/
-                            break;
+            var obj = jQuery.parseJSON(result);
+            row = "";
+            //noComment = true;
+            for (i=0;i < obj.data.length;i++) {
+                if (p_id == obj.data[i].ID) {
+                    COMMENT = obj.data[i].comment;
+                    for (j=0;j < COMMENT.length;j++) {
+                        row += '<div class="row">';
+                        row += '<div class="col-md-2">';
+                        row += '<img width="40" height="40" style="margin-top: 3px;margin-left: 40px;" onclick="" class="img-rounded" src="images/members/'+COMMENT[j].ID+'.jpg" alt="">';
+                        row += '</div>';
+                        row += '<div class="col-md-8">';
+                        row += '<b>'+COMMENT[j].USERNAME+'</b><br>';
+                        row += COMMENT[j].MSG+'<br>';
+                        if (COMMENT[j].ID == myID) {
+                            row += '<div align="right"';
+                            //row += '<button onclick="deleteComment('+p_id+','+COMMENT[j].COMMENT_ID+');" type="submit" class="btn btn-default btn-xs">';
+                            row += '<button onclick="deleteComment('+p_id+',40);" type="submit" class="btn btn-default btn-xs">';
+                            row += '<i class="fa fa-delete fa-fw"></i>delete';
+                            row += '</button>';
+                            row += '</div>';
+
+                            //row += ' <button id="postBtn" onclick="deleteComment('+p_id+','+COMMENT[j].COMMENT_ID+');" class="btn btn-default" type="button">Post</button>';
                         }
+                        row += '</div>';
+                        row += '</div>';
                     }
-                    /*if (noComment)
-                        row += 'No comment';*/
+                    /*if (COMMENT.length != 0)
+                        noComment = false;*/
+                    break;
+                }
+            }
+            /*if (noComment)
+                row += 'No comment';*/
 
-                    row += '<div class="row">';
-                    row += '<div class="col-md-2">';
-                    row += '<img width="40" height="40" style="margin-top: 3px;margin-left: 40px;" onclick="" class="img-rounded" src="images/members/'+myID+'.jpg" alt="">';
-                    row += '</div>';
-                    row += '<div class="col-md-10">';
+            row += '<div class="row">';
+            row += '<div class="col-md-2">';
+            row += '<img width="40" height="40" style="margin-top: 3px;margin-left: 40px;" onclick="" class="img-rounded" src="images/members/'+myID+'.jpg" alt="">';
+            row += '</div>';
+            row += '<div class="col-md-10">';
 
-                    row += '<div class="input-group custom-search-form" style="margin-top: 5px;">';
-                    row += '<input type="text" id="commentText" class="form-control" placeholder="Write a comment...">';
-                    row += '<span class="input-group-btn">';
-                    row += '<button id="commentBtn" onclick="sendComment('+p_id+');" class="btn btn-default" type="button">';
-                    //row += '<i class="fa fa-search"></i>Comment';
-                    row += 'Comment';
-                    row += '</button>';
-                    row += '</span>';
-                    row += '</div>';
-                    /*row += '<b>'+COMMENT[j].USERNAME+'</b><br>';
-                    row += COMMENT[j].MSG+'<br>';*/
-                    row += '</div>';
-                    row += '</div>';
+            row += '<div class="input-group custom-search-form" style="margin-top: 5px;">';
+            row += '<input type="text" id="commentText" class="form-control" placeholder="Write a comment...">';
+            row += '<span class="input-group-btn">';
+            row += '<button id="commentBtn" onclick="sendComment('+p_id+');" class="btn btn-default" type="button">';
+            //row += '<i class="fa fa-search"></i>Comment';
+            row += 'Comment';
+            row += '</button>';
+            row += '</span>';
+            row += '</div>';
+            /*row += '<b>'+COMMENT[j].USERNAME+'</b><br>';
+            row += COMMENT[j].MSG+'<br>';*/
+            row += '</div>';
+            row += '</div>';
 
-                    init_table('#dlgTxtComment', row);
-                });
-                head = 'Comment';
-                init_table('#dlgHeadComment', head);
-                //$(this).find('.danger').attr('href', $(e.relatedTarget).data('href'));
+            init_table('#dlgTxtComment', row);
+        });
+        head = 'Comment';
+        init_table('#dlgHeadComment', head);
+        //$(this).find('.danger').attr('href', $(e.relatedTarget).data('href'));
     }
     $.get("module/frontend/get.php?option=member", function(result) {
         var obj = jQuery.parseJSON(result);
@@ -146,10 +175,44 @@
         myName = obj.data[0].NAME;
     });
     $(document).ready(function(){
+        showUpload();
+        function showUpload() {
+            ID=6;
+            row="";
+            row += '<div class="col-md-7 portfolio-item">';
+            row += '<div class="feed_item">';
+            row += '<b>Upload photo</b>';
+            row += '<br><br>';
+
+            row += '<textarea style="width:480px;" rows="2" type="text" id="uploadText" class="form-control" placeholder="Say something about this photo..."></textarea>';
+            row += '<br>';
+
+            /*row += '<a href="#" id="post" data-href="'+ID;
+            row += '" data-toggle="modal" data-target="#comment-dialog">Comment</a>';*/
+
+            /*row += '<div class="inputWrapper">';
+            row += '<input class="fileInput" type="file" name="file1"/>';
+            row += '</div>';*/
+
+            row += '<input type="file" id="selectedPic" style="display: none;" />';
+            row += '<a href="#" onclick="javascript:document.getElementById(\'selectedPic\').click();"><i class="fa fa-camera fa-fw"></i>Photo</a>';
+            //row += '<input type="button" value="Browse..." onclick="document.getElementById("selectedFile").click();" />';
+
+            row += ' · <a href="#"><i class="fa fa-map-marker fa-fw"></i>Location</a>';
+            row += ' · <a href="#"><i class="fa fa-user fa-fw"></i>Tag</a>';
+            row += ' · <a href="#"><i class="fa fa-user fa-fw"></i>Posture</a>';
+            row += ' · <a href="#"><i class="fa fa-user fa-fw"></i>Thing</a>';
+            row += ' · <a href="#"><i class="fa fa-user fa-fw"></i>Time</a>';
+            row += ' <button id="postBtn" onclick="post(id);" class="btn btn-default" type="button">Post</button>';
+
+            row += '</div></div>';
+            init_table('#upload-row', row);
+        }
+
         $.get("module/frontend/get.php?option=photo&s=0&n="+n, function(result) {
             //alert(result);
             var obj = jQuery.parseJSON(result);
-            //init_table('#user-row', result);
+            //init_table('#feed-row', result);
             showData(obj);
         });
         function showData(obj) {
@@ -175,7 +238,7 @@
                 row += '<img width="50" height="50" style="margin-top: 3px;" onclick="" class="img-rounded" src="images/members/'+OWNID+'.jpg" alt="">';
                 row += '</div>';
                 row += '<div class="col-md-4">';
-                row += '<b>'+NAME+'</b></br>';
+                row += '<b>'+NAME+'</b><br>';
 
                 if (TAG.length > 0) {
                     row += '<a href="#" id="Tag" data-href="'
@@ -192,13 +255,13 @@
                 row += WITH+'<br>';
                 row += '" data-toggle="modal" data-target="#normal-dialog">Detail</a>';
 
-                row += '<br><font size="1">'+DATE_TIME+'</font></br>';
+                row += '<br><font size="1">'+DATE_TIME+'</font><br>';
                 
                 row += '</div>';
                 row += '</div>';
 
-                row += '</br>'+CAPTION+'';
-                row += '</br></br>';
+                row += '<br>'+CAPTION+'';
+                row += '<br><br>';
                 row += '<a href="#">';
                 row += '<img width="400" onclick="" class="img-rounded" src="images/photos/'+ID+'.jpg" alt="" hspace="0">';
                 row += '</a>';
@@ -236,7 +299,7 @@
                 row += '" data-toggle="modal" data-target="#normal-dialog">'+LIKE.length+' people</a> like this.';
                 row += '</div></div>';
             }
-            init_table('#user-row', row);
+            init_table('#feed-row', row);
             $('#normal-dialog').on('show.bs.modal', function(e) {
                 init_table('#dlgTxt', $(e.relatedTarget).attr('data-href'));
                 head = e.relatedTarget.id;

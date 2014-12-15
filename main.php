@@ -17,6 +17,7 @@
     
     <script src="<?=$CONFIG["javascript"]["admin"]?>jquery-1.11.0.js"></script>
     <script src="<?=$CONFIG["javascript"]["admin"]?>jquery.form.js"></script>
+    <script src="<?=$CONFIG["javascript"]["frontend"]?>bootbox.min.js"></script>
 
     <!-- Core CSS - Include with every page -->
     <link href="<?=$CONFIG["css"]["admin"]?>bootstrap.css" rel="stylesheet" />
