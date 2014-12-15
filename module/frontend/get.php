@@ -49,13 +49,37 @@ else if ($table_name=="PHOTO") {
     for ($i=0;$i<$n;$i++) {
       $id = $result["data"]["$i"]["ID"];
       $owner = $result["data"]["$i"]["OWNER_ID"];
+      $loc_id = $result["data"]["$i"]["LOC_ID"];
+      $timing_id = $result["data"]["$i"]["LOC_ID"];
+      $pos_id = $result["data"]["$i"]["LOC_ID"];
+      $thing_id = $result["data"]["$i"]["LOC_ID"];
+
+      $sql = "select ID, NAME from LOCATION where ID=$loc_id";
+      $stid = oci_parse($db_conn, $sql);
+      $r = oci_execute($stid);
+      oci_fetch_all($stid, $result["data"][$i]["location"], null, null, OCI_FETCHSTATEMENT_BY_ROW);
+
+      $sql = "select ID, NAME from TIMING where ID=$timing_id";
+      $stid = oci_parse($db_conn, $sql);
+      $r = oci_execute($stid);
+      oci_fetch_all($stid, $result["data"][$i]["timing"], null, null, OCI_FETCHSTATEMENT_BY_ROW);
+
+      $sql = "select ID, NAME from POSTURE where ID=$pos_id";
+      $stid = oci_parse($db_conn, $sql);
+      $r = oci_execute($stid);
+      oci_fetch_all($stid, $result["data"][$i]["posture"], null, null, OCI_FETCHSTATEMENT_BY_ROW);
+
+      $sql = "select ID, NAME from THING where ID=$thing_id";
+      $stid = oci_parse($db_conn, $sql);
+      $r = oci_execute($stid);
+      oci_fetch_all($stid, $result["data"][$i]["thing"], null, null, OCI_FETCHSTATEMENT_BY_ROW);
 
       $sql = "select * from MEMBER where ID=$owner";
       $stid = oci_parse($db_conn, $sql);
       $r = oci_execute($stid);
       oci_fetch_all($stid, $result["data"][$i]["owner"], null, null, OCI_FETCHSTATEMENT_BY_ROW);
 
-      $sql = "select b.ID, b.USERNAME, a.MSG, a.DATE_TIME from COMMENT_PHOTO a, MEMBER b where a.P_ID=$id and a.M_ID=b.ID";
+      $sql = "select a.ID as 'C_ID' ,b.ID, b.USERNAME, a.MSG, a.DATE_TIME from COMMENT_PHOTO a, MEMBER b where a.P_ID=$id and a.M_ID=b.ID";
       $stid = oci_parse($db_conn, $sql);
       $r = oci_execute($stid);
       oci_fetch_all($stid, $result["data"][$i]["comment"], null, null, OCI_FETCHSTATEMENT_BY_ROW);
@@ -69,11 +93,6 @@ else if ($table_name=="PHOTO") {
       $stid = oci_parse($db_conn, $sql);
       $r = oci_execute($stid);
       oci_fetch_all($stid, $result["data"][$i]["tag"], null, null, OCI_FETCHSTATEMENT_BY_ROW);
-
-      $sql = "select b.ID, b.NAME from PHOTO_WITH a, THING b where a.PHOTO_ID=$id and a.THING_ID=b.ID";
-      $stid = oci_parse($db_conn, $sql);
-      $r = oci_execute($stid);
-      oci_fetch_all($stid, $result["data"][$i]["with"], null, null, OCI_FETCHSTATEMENT_BY_ROW);
 
       $result["status"] = "success";
     }
