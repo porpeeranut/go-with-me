@@ -170,9 +170,13 @@
         //$(this).find('.danger').attr('href', $(e.relatedTarget).data('href'));
     }
     $.get("module/frontend/get.php?option=member", function(result) {
-        var obj = jQuery.parseJSON(result);
+        alert(result);
+        init_table('#feed-row', result);
+        /*var obj = jQuery.parseJSON(result);
         myID = obj.data[0].ID;
-        myName = obj.data[0].NAME;
+        myName = obj.data[0].NAME;*/
+        myID = 18;
+        myName = sss;
     });
     $(document).ready(function(){
         showUpload();
@@ -210,9 +214,9 @@
         }
 
         $.get("module/frontend/get.php?option=photo&s=0&n="+n, function(result) {
-            //alert(result);
-            var obj = jQuery.parseJSON(result);
+            alert(result);
             //init_table('#feed-row', result);
+            var obj = jQuery.parseJSON(result);
             showData(obj);
         });
         function showData(obj) {

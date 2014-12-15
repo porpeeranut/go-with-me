@@ -126,7 +126,7 @@ else if($table_name=="MEMBER") {
     $sql = "select * from PHOTO where OWNER_ID=$id";
     $stid = oci_parse($db_conn, $sql);
     $r = oci_execute($stid);
-    oci_fetch_all($stid, $result["data"]["phogo"], null, null, OCI_FETCHSTATEMENT_BY_ROW);
+    oci_fetch_all($stid, $result["data"]["photo"], null, null, OCI_FETCHSTATEMENT_BY_ROW);
   } else {
     $result["status"] = "failed";
     $result["data"] = $e["message"];
