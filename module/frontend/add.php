@@ -73,32 +73,87 @@ if ($table_name=="REGISTER") {
   }
 }
 else if ($table_name=="PHOTO") {
+
+  if (!isset($_POST["caption"]) || !isset($_FILES["pic"]) || $_POST["caption"]=="") {
+    $result["status"] = "failed";
+    $result["data"] = "Invaid Value.";
+    echo json_encode($result);
+    exit;
+  }
+
   $caption = clean($_POST["caption"]);
   $owner = intval($m_id);
   $loc_id = intval($_POST["loc_id"]);
   $timing_id = intval($_POST["timing_id"]);
   $pos_id = intval($_POST["pos_id"]);
   $thing_id = intval($_POST["thing_id"]);
+  $is_tag = 0;
+  if ($_POST["tag"]!="0") {
+    $tag = explode(",",$_POST["tag"]);
+    $is_tag = 1;
+  }
 
-  $sql = "insert into PHOTO values (photo_seq.nextval, '$caption', $owner, $loc_id, $timing_id, $pos_id, $thing_id, systimestamp)";
+  $image = $_FILES["pic"];
+  $profile = getFileType($image["name"]);
+
+
+
+  $sql = "insert into PHOTO values (photo_seq.nextval, '$caption', $owner, $loc_id, $timing_id, $pos_id, $thing_id, systimestamp, '$profile')";
   $stid = oci_parse($db_conn, $sql);
   $r = oci_execute($stid);
 
   if ($r) {
+
+    $stid = oci_parse($db_conn, "SELECT photo_seq.currval FROM dual");
+    oci_execute($stid);
+    $row = oci_fetch_assoc($stid);
+    $id = intval($row["CURRVAL"]);
+    if ($is_tag) {
+      foreach($tag as $t) {
+        $sql = "insert into TAG values ($t, $id)";
+        $stid = oci_parse($db_conn, $sql);
+        $r = oci_execute($stid);
+      }
+    }
+
     $sql = "select * from badge where ID not in (select BADGE_ID from BADGE_COLLECT where MEMBER_ID=$m_id)";
     $stid = oci_parse($db_conn, $sql);
     $r = oci_execute($stid);
     $nb = oci_fetch_all($stid, $badge, null, null, OCI_FETCHSTATEMENT_BY_ROW);
-
-    print_r($badge);
 
     $sql = "select p.THING_ID, p.LOC_ID, p.TIMING_ID, p.POS_ID from PHOTO p where p.OWNER_ID=$m_id";
     $stid = oci_parse($db_conn, $sql);
     $r = oci_execute($stid);
     oci_fetch_all($stid, $photo, null, null, OCI_FETCHSTATEMENT_BY_COLUMN);
 
+    $sql = "select M_ID from TAG where P_ID in (select ID from PHOTO where OWNER_ID=$m_id)";
+    $stid = oci_parse($db_conn, $sql);
+    $r = oci_execute($stid);
+    oci_fetch_all($stid, $tag, null, null, OCI_FETCHSTATEMENT_BY_COLUMN);
+
+    if ($is_tag) $photo["M_ID"] = $tag["M_ID"];
+    else $photo["M_ID"] = array();
+
+
+    $stid = oci_parse($db_conn, "SELECT photo_seq.currval FROM dual");
+    oci_execute($stid);
+    $row = oci_fetch_assoc($stid);
+    $id = intval($row["CURRVAL"]);
+
+    $target_dir = $CONFIG["path"]["root"]."/".$CONFIG["image"]["photo"];
+    $im = $target_dir.$id.".".$profile;
+    if (!move_uploaded_file($image["tmp_name"], $im)) {
+      $result["data"] = "Image Error";
+    } else {
+      $result["status"] = "success";
+      $result["data"] = "";
+    }
+
+    $result["data"] = array();
+    $score = 0;
     foreach($badge as $row) {
       $id = $row["ID"];
+      $sc = $row["SCORE"];
       $sql = "select THING_ID from BADGE_THING where BADGE_ID=$id";
       $stid = oci_parse($db_conn, $sql);
       $r = oci_execute($stid);
@@ -124,20 +179,22 @@ else if ($table_name=="PHOTO") {
       $r = oci_execute($stid);
       $nb = oci_fetch_all($stid, $location, null, null, OCI_FETCHSTATEMENT_BY_COLUMN);
 
-      print_r($thing);
-      print_r(array_intersect($location[0], $photo["LOC_ID"]));
-      if (array_intersect($thing[0], $photo["THING_ID"]) == $thing and
-          //array_intersect($member, $photo["M_ID"]) == $member and
-          array_intersect($timing[0], $photo["TIMING_ID"]) == $timing and
-          array_intersect($posture[0], $photo["POS_ID"]) == $posture and
-          array_intersect($location, $photo["LOC_ID"]) == $location) {
+      if (array_intersect($thing["THING_ID"], $photo["THING_ID"]) == $thing["THING_ID"] and
+          array_intersect($member["MEMBER_ID"], $photo["M_ID"]) == $member["MEMBER_ID"] and
+          array_intersect($timing["TIMING_ID"], $photo["TIMING_ID"]) == $timing["TIMING_ID"] and
+          array_intersect($posture["POSTURE_ID"], $photo["POS_ID"]) == $posture["POSTURE_ID"] and
+          array_intersect($location["LOCATION_ID"], $photo["LOC_ID"]) == $location["LOCATION_ID"]) {
 
-        $result["data"].push_back($row);
+        array_push($result["data"], $row);
+        $score+=$sc;
         $sql = "insert into BADGE_COLLECT values ($id, $m_id)";
         $stid = oci_parse($db_conn, $sql);
         $r = oci_execute($stid);
       }
     }
+    $sql = "update MEMBER set ALL_SCORE=ALL_SCORE+$score where ID=$m_id";
+    $stid = oci_parse($db_conn, $sql);
+    $r = oci_execute($stid);
     $result["status"] = "success";
   } else {
     $e = oci_error($stid);
@@ -176,9 +233,9 @@ else if ($table_name=="LIKE") {
   }
 }
 else if ($table_name=="MESSAGE") {
-  $to = intval($_POST["to"]);
-  $msg = clean($_POST["msg"]);
-  $sql = "insert into MESSAGE values (message.nextval, $m_id, $to, msg, systimestamp)";
+  $to = intval($_GET["to"]);
+  $msg = clean($_GET["msg"]);
+  $sql = "insert into MESSAGE values (message_seq.nextval, $m_id, $to, '$msg', systimestamp)";
   $stid = oci_parse($db_conn, $sql);
   $r = oci_execute($stid);
   if ($r) {

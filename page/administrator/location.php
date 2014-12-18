@@ -2,8 +2,8 @@
     <div class="col-lg-7">
         <h1 class="page-header">Location</h1>
     </div>
-    <br/>
-    <br/>
+    <br>
+    <br>
     <div class="col-lg-2">
         <select id='searchType' class="form-control">
             <option>ID</option>
@@ -22,7 +22,7 @@
 <div id="all-row" class="row">
 </div>
 
-</br>
+<br>
 <button id="btn_add" onclick="window.document.location='admin.php?option=add&TYPE=location';" class="btn btn-default">Add</button>
 
 <hr>    
@@ -31,9 +31,10 @@
 
 <script>
     var start = 0;
-    var n = 8;
+    var n = 800;
     $(document).ready(function(){
         $.get("module/administrator/get.php?option=location&s=0&n="+n, function(result) {
+            //alert(result);
             var obj = jQuery.parseJSON(result);
             showData(obj);
         });
@@ -55,18 +56,18 @@
         function showData(obj) {
             row = "";
             for (i=0;i<obj.data.length;i++) {
+                if (obj.data[i].ID == 0)
+                    continue;
                 ID = obj.data[i].ID;
                 NAME = obj.data[i].NAME;
                 DETAIL = obj.data[i].DETAIL;
                 row += '<div class="col-md-3 portfolio-item">';
                 row += '<a href="#">';
-                row += '<img onclick="window.document.location=\'admin.php?option=badge_type_detail&TYPE=locations&ID='+ID+'&NAME='+NAME+'&DETAIL='+DETAIL+'\';" class="img-responsive" src="images/locations/'+obj.data[i].ID+'.jpg" alt="">';
+                row += '<img onclick="window.document.location=\'admin.php?option=badge_type_detail&TYPE=locations&ID='+ID+'\';" class="img-responsive" src="images/locations/'+obj.data[i].ID+'.jpg" alt="">';
                 row += '</a>';
-                row += '<h3>';
-                row += obj.data[i].ID;
-                row += '</h3>';
-                row += obj.data[i].NAME+'<br/>';
-                row += obj.data[i].DETAIL+'<br/>';
+                //row += '<h3>'+obj.data[i].ID+'</h3>';
+                row += '<b>'+obj.data[i].NAME+'</b><br>';
+                row += obj.data[i].DETAIL+'<br>';
                 row += '</div>';
             }
             init_table('#all-row', row);
@@ -83,11 +84,9 @@
                     row += '<a href="#">';
                     row += '<img onclick="window.document.location=\'admin.php?option=badge_type_detail&TYPE=locations&ID='+ID+'&NAME='+NAME+'&DETAIL='+DETAIL+'\';" class="img-responsive" src="images/locations/'+obj.data[i].ID+'.jpg" alt="">';
                     row += '</a>';
-                    row += '<h3>';
-                    row += obj.data[i].ID;
-                    row += '</h3>';
-                    row += obj.data[i].NAME+'<br/>';
-                    row += obj.data[i].DETAIL+'<br/>';
+                    //row += '<h3>'+obj.data[i].ID+'</h3>';
+                    row += '<b>'+obj.data[i].NAME+'</b><br>';
+                    row += obj.data[i].DETAIL+'<br>';
                     row += '</div>';
                 }
                 init_table('#all-row', row);

@@ -8,7 +8,7 @@
 	<div class="col-md-1">
     </div>
     <div class="col-md-4">
-        <img class="img-responsive" src="http://placehold.it/300x200" alt="">
+        <img class="img-responsive" id="showPic" width="96%" src="" alt="">
     </div>
 
     <div class="col-md-4">
@@ -37,25 +37,35 @@
 
 <script>
     var start = 0;
-    var n = 8;
+    var n = 800;
 	$(document).ready(function(){
         id = getUrlParameter('ID');
-        user = getUrlParameter('USERNAME');
+        /*user = getUrlParameter('USERNAME');
         name = getUrlParameter('NAME');
         email = getUrlParameter('EMAIL');
         profile = getUrlParameter('PROFILE');
-        score = getUrlParameter('ALL_SCORE');
+        score = getUrlParameter('ALL_SCORE');*/
 
-        document.getElementById('txtName').value = name;
+        /*document.getElementById('txtName').value = name;
         document.getElementById('txtEmail').value = email;
-        document.getElementById('txtScore').value = score;
+        document.getElementById('txtScore').value = score;*/
 
         $.get("module/administrator/get.php?option=member&s=0&n="+n, function(result) {
             var obj = jQuery.parseJSON(result);
-            document.getElementById('txtUsername').value = obj.data[0].USERNAME;
-            document.getElementById('txtName').value = obj.data[0].NAME;
-            document.getElementById('txtEmail').value = obj.data[0].EMAIL;
-            document.getElementById('txtScore').value = obj.data[0].ALL_SCORE;
+            for (i=0;i < obj.data.length;i++) {
+                if (id == obj.data[i].ID) {
+                    name = obj.data[i].NAME;
+                    email = obj.data[i].EMAIL;
+                    score = obj.data[i].ALL_SCORE;
+                    profileEXT = obj.data[i].PROFILE;
+                    
+                    $("#txtName").val(obj.data[i].NAME);
+                    $("#txtEmail").val(obj.data[i].EMAIL);
+                    $("#txtScore").val(obj.data[i].ALL_SCORE);
+                    $("#showPic").attr("src","images/members/"+id+"."+profileEXT);
+                    break;
+                }
+            }
         });
         $('#update').attr("action", "module/administrator/update.php?option=member&id="+id);
         $('#update').ajaxForm(function(result) {

@@ -32,7 +32,7 @@
 
 <script>
     var start = 0;
-    var n = 8;
+    var n = 800;
     $(document).ready(function(){
         $.get("module/administrator/get.php?option=badge&s=0&n="+n, function(result) {
             var obj = jQuery.parseJSON(result);
@@ -64,9 +64,6 @@
                 row += '<a href="#">';
                 row += '<img onclick="window.document.location=\'admin.php?option=badge_detail&ID='+ID+'&NAME='+NAME+'&SCORE='+SCORE+'&DETAIL='+DETAIL+'\';" class="img-responsive img-circle" src="images/badges/logo_'+obj.data[i].ID+'.jpg" alt="">';
                 row += '</a>';
-                row += '<h3>';
-                row += ID;
-                row += '</h3>';
                 row += 'Name: '+NAME+'<br/>';
                 row += 'Score: '+SCORE+'<br/>';
                 row += 'Detail: '+DETAIL+'<br/>';
@@ -87,9 +84,6 @@
                     row += '<a href="#">';
                     row += '<img onclick="window.document.location=\'admin.php?option=badge_detail&ID='+ID+'&NAME='+NAME+'&SCORE='+SCORE+'&DETAIL='+DETAIL+'\';" class="img-responsive img-circle" src="images/badges/logo_'+obj.data[i].ID+'.jpg" alt="">';
                     row += '</a>';
-                    row += '<h3>';
-                    row += ID;
-                    row += '</h3>';
                     row += 'Name: '+NAME+'<br/>';
                     row += 'Score: '+SCORE+'<br/>';
                     row += 'Detail: '+DETAIL+'<br/>';

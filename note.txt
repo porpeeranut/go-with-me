@@ -14,13 +14,9 @@ search
 ## top rank
 	show detail
 
-#index
-	login
-		USERNAME,pass
-	regis
-		USERNAME,NAME,EMAIL,pass,profilePic
 #profile
 	USERNAME,NAME,EMAIL,profilePic,score,#edit
+	badge,photo,message
 #edit profile
 	NAME,EMAIL,current pass,new pass,re-type new,profilePic
 
@@ -32,10 +28,3 @@ search
 	pic,location,time,posture,thing, comment+add comment,like,tag, #edit,delete
 #user photo edit
 	caption
-upload pic
-	caption,tag
-home
-	home - top user(name, score),all badge,upload pic,
-	profile,
-	photo,
-	badge

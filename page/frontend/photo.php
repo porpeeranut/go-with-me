@@ -13,7 +13,7 @@
 
 <script>
     var start = 0;
-    var n = 8;
+    var n = 800;
     $(document).ready(function(){
         $.get("module/administrator/get.php?option=photo&s=0&n="+n, function(result) {
             var obj = jQuery.parseJSON(result);

@@ -32,15 +32,37 @@
 
 <script>
     var start = 0;
-    var n = 8;
+    var n = 800;
 	$(document).ready(function(){
         ID = getUrlParameter('ID');
         NAME = getUrlParameter('NAME');
         SCORE = getUrlParameter('SCORE');
         DETAIL = getUrlParameter('DETAIL');
-        $("#name").html(NAME);
-        $("#score").html(SCORE);
-        $("#detail").html(DETAIL);
+
+        $.get("module/administrator/get.php?option=badge&s=0&n="+n, function(result) {
+            var obj = jQuery.parseJSON(result);
+            row = "";
+            for (i=0;i<obj.data.length;i++) {
+                if (ID == obj.data[i].ID) {
+                    NAME = obj.data[i].NAME;
+                    SCORE = obj.data[i].SCORE;
+                    DETAIL = obj.data[i].DETAIL;
+                    $("#name").html(NAME);
+                    $("#score").html(SCORE);
+                    $("#detail").html(DETAIL);
+                    row += '<div class="col-md-3 portfolio-item">';
+                    row += '<a href="#">';
+                    row += '<img onclick="window.document.location=\'admin.php?option=badge_detail&ID='+ID+'&NAME='+NAME+'&SCORE='+SCORE+'&DETAIL='+DETAIL+'\';" class="img-responsive img-circle" src="images/badges/logo_'+obj.data[i].ID+'.jpg" alt="">';
+                    row += '</a>';
+                    row += 'Name: '+NAME+'<br/>';
+                    row += 'Score: '+SCORE+'<br/>';
+                    row += 'Detail: '+DETAIL+'<br/>';
+                    row += '</div>';
+                }
+            }
+            init_table('#all-row', row);
+        });
+
         $("#logo_img").attr("src", "images/badges/logo_"+ID+".jpg");
         $("#ex_img").attr("src", "images/badges/ex_"+ID+".jpg");
         $("#btn_edit").attr("onclick", "window.document.location='admin.php?option=edit_badge&ID="+ID+"&NAME="+NAME+"&SCORE="+SCORE+"&DETAIL="+DETAIL+"';");

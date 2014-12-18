@@ -2,12 +2,12 @@
     <div class="col-lg-7">
         <h1 class="page-header">Photo</h1>
     </div>
-    <br/>
-    <br/>
+    <br>
+    <br>
     <div class="col-lg-2">
         <select id='searchType' class="form-control">
             <option>ID</option>
-            <option>OWNER_ID</option>
+            <option>CAPTION</option>
         </select>
     </div>
     <div class="col-lg-3">
@@ -57,9 +57,10 @@
 
 <script>
     var start = 0;
-    var n = 8;
+    var n = 800;
     $(document).ready(function(){
         $.get("module/administrator/get.php?option=photo&s=0&n="+n, function(result) {
+            //alert(result);
             var obj = jQuery.parseJSON(result);
             showData(obj);
 /*LOC_ID
@@ -92,11 +93,7 @@ POS_ID*/
                 row += '<a href="#">';
                 row += '<img onclick="window.document.location=\'admin.php?option=photo_detail&ID='+ID+'&CAPTION='+CAPTION+'&OWNER_ID='+OWNER_ID+'&DATE_TIME='+DATE_TIME+'\';" class="img-responsive" src="images/photos/'+ID+'.jpg" alt="">';
                 row += '</a>';
-                row += '<h3>';
-                row += ID;
-                row += '</h3>';
-                row += CAPTION+'<br/>';
-                row += 'owner '+OWNER_ID+'<br/>';
+                row += '<b>'+CAPTION+'</b><br>';
                 row += '</div>';
             }
             init_table('#all-row', row);
@@ -114,11 +111,7 @@ POS_ID*/
                     row += '<a href="#">';
                     row += '<img onclick="window.document.location=\'admin.php?option=photo_detail&ID='+ID+'&CAPTION='+CAPTION+'&OWNER_ID='+OWNER_ID+'&DATE_TIME='+DATE_TIME+'\';" class="img-responsive" src="images/photos/'+ID+'.jpg" alt="">';
                     row += '</a>';
-                    row += '<h3>';
-                    row += ID;
-                    row += '</h3>';
-                    row += CAPTION+'<br/>';
-                    row += 'owner '+OWNER_ID+'<br/>';
+                    row += '<b>'+CAPTION+'</b><br>';
                     row += '</div>';
                 }
                 init_table('#all-row', row);

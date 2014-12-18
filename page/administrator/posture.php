@@ -31,7 +31,7 @@
 
 <script>
     var start = 0;
-    var n = 8;
+    var n = 800;
     $(document).ready(function(){
         $.get("module/administrator/get.php?option=posture&s=0&n="+n, function(result) {
             var obj = jQuery.parseJSON(result);
@@ -55,6 +55,8 @@
         function showData(obj) {
             row = "";
             for (i=0;i<obj.data.length;i++) {
+                if (obj.data[i].ID == 0)
+                    continue;
                 ID = obj.data[i].ID;
                 NAME = obj.data[i].NAME;
                 DETAIL = obj.data[i].DETAIL;
@@ -62,10 +64,8 @@
                 row += '<a href="#">';
                 row += '<img onclick="window.document.location=\'admin.php?option=badge_type_detail&TYPE=postures&ID='+ID+'&NAME='+NAME+'&DETAIL='+DETAIL+'\';" class="img-responsive" src="images/postures/'+obj.data[i].ID+'.jpg" alt="">';
                 row += '</a>';
-                row += '<h3>';
-                row += obj.data[i].ID;
-                row += '</h3>';
-                row += obj.data[i].NAME+'<br/>';
+                //row += '<h3>'+obj.data[i].ID+'</h3>';
+                row += '<b>'+obj.data[i].NAME+'</b><br>';
                 row += obj.data[i].DETAIL+'<br/>';
                 row += '</div>';
             }
@@ -83,10 +83,8 @@
                     row += '<a href="#">';
                     row += '<img onclick="window.document.location=\'admin.php?option=badge_type_detail&TYPE=postures&ID='+ID+'&NAME='+NAME+'&DETAIL='+DETAIL+'\';" class="img-responsive" src="images/postures/'+obj.data[i].ID+'.jpg" alt="">';
                     row += '</a>';
-                    row += '<h3>';
-                    row += obj.data[i].ID;
-                    row += '</h3>';
-                    row += obj.data[i].NAME+'<br/>';
+                    //row += '<h3>'+obj.data[i].ID+'</h3>';
+                    row += '<b>'+obj.data[i].NAME+'</b><br>';
                     row += obj.data[i].DETAIL+'<br/>';
                     row += '</div>';
                 }

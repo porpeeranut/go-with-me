@@ -1,6 +1,9 @@
 <?php
     include_once "config.inc.php";
     session_start();
+    if (isset($_SESSION["login"]) && $_SESSION["login"]=="true") {
+      header("location: main.php?option=home");
+    }
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -14,7 +17,7 @@
     <script src="<?=$CONFIG["javascript"]["admin"]?>jquery.form.js"></script>
 
     <link href="<?=$CONFIG["css"]["frontend"]?>bootstrap.css" rel="stylesheet">
-    
+
     <link href="<?=$CONFIG["css"]["frontend"]?>sticky-footer.css" rel="stylesheet">
   <link href="<?=$CONFIG["css"]["frontend"]?>fblogin.css" rel="stylesheet">
   </head>
@@ -29,7 +32,7 @@
               <span class="icon-bar"></span>
               <span class="icon-bar"></span>
             </button>
-            <a class="navbar-brand" href="#">GoWithMe</a>
+            <img height="80" src="images/logo.png">
           </div>
       <div class="collapse navbar-collapse">
         <form class="navbar-form navbar-right" action="" method="post" id="login">
@@ -48,17 +51,14 @@
             </div>
           </div>
         </form>
-            
+
           </div>
         </div>
       </div>
       <div class="container" id="home">
     <div class="row">
       <div class="col-md-7">
-        <h3 class="slogan">
-          eiei.
-        </h3>
-        <img src="img/background.png" class="img-responsive" />
+        <img src="images/index.png" class="img-responsive" />
       </div>
       <div class="col-md-5">
         <form action="module/frontend/add.php?option=register" method="post" class="form" id="register">
@@ -75,7 +75,7 @@
             <button class="btn btn-lg btn-primary btn-block signup-btn" id="submit">
                 Create my account</button>
             </form>
-      
+
       </div>
     </div>
       </div>
@@ -92,7 +92,7 @@
                   alert(obj.data);
           });
           $('#register').ajaxForm(function(result) {
-              alert(result);
+              //alert(result);
               var obj = jQuery.parseJSON(result);
               if (obj.status == "success")
                   window.location.href = 'main.php?option=home';
@@ -100,8 +100,12 @@
                   alert(obj.data);
           });
       });
+
+      bootbox.dialog({
+        title: table,
+        message: mes
+      });
     </script>
 
   </body>
 </html>
-

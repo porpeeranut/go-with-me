@@ -31,15 +31,35 @@
 
 <script>
     var start = 0;
-    var n = 8;
+    var n = 800;
 	$(document).ready(function(){
         ID = getUrlParameter('ID');
         CAPTION = getUrlParameter('CAPTION');
         OWNER_ID = getUrlParameter('OWNER_ID');
         DATE_TIME = getUrlParameter('DATE_TIME');
-        $("#CAPTION").html(CAPTION);
-        $("#OWNER_ID").html(OWNER_ID);
-        $("#DATE_TIME").html(DATE_TIME);
+
+        $.get("module/administrator/get.php?option=photo&s=0&n="+n, function(result) {
+            //alert(result);
+            var obj = jQuery.parseJSON(result);
+            row = "";
+            for (i=0;i<obj.data.length;i++) {
+                if (ID == obj.data[i].ID) {
+                    CAPTION = obj.data[i].CAPTION;
+                    OWNER_ID = obj.data[i].OWNER_ID;
+                    DATE_TIME = obj.data[i].DATE_TIME;
+                    $("#CAPTION").html(CAPTION);
+                    $("#OWNER_ID").html(OWNER_ID);
+                    $("#DATE_TIME").html(DATE_TIME);
+                    row += '<div class="col-md-3 portfolio-item">';
+                    row += '<a href="#">';
+                    row += '<img onclick="window.document.location=\'admin.php?option=photo_detail&ID='+ID+'&CAPTION='+CAPTION+'&OWNER_ID='+OWNER_ID+'&DATE_TIME='+DATE_TIME+'\';" class="img-responsive" src="images/photos/'+ID+'.jpg" alt="">';
+                    row += '</a>';
+                    row += '<b>'+CAPTION+'</b><br>';
+                    row += '</div>';
+                }
+            }
+            init_table('#all-row', row);
+        });
         $("#img").attr("src", "images/photos/"+ID+".jpg");
         $("#btn_edit").attr("onclick", "window.document.location='admin.php?option=edit_photo&ID="+ID+"&CAPTION="+CAPTION+"';");
         $("#btn_delete").click(function(){

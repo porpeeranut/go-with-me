@@ -1,6 +1,6 @@
 <div class="row">
     <div class="col-lg-12">
-        <h1 class="page-header">Badge</h1>
+        <h1 class="page-header"><i class="fa fa-book fa-fw"></i> Badge</h1>
     </div>
 </div>
 
@@ -9,7 +9,7 @@
 
 <script>
     var start = 0;
-    var n = 8;
+    var n = 800;
     $(document).ready(function(){
         $.get("module/frontend/get.php?option=badge", function(result) {
             var obj = jQuery.parseJSON(result);
@@ -24,7 +24,7 @@
                 DETAIL = obj.data[i].DETAIL;
                 row += '<div class="col-md-3 portfolio-item">';
                 row += '<div class="badge_detail"><a href="#">';
-                row += '<img  width="200" height="200" onclick="window.document.location=\'admin.php?option=badge_detail&ID='+ID+'&NAME='+NAME+'&SCORE='+SCORE+'&DETAIL='+DETAIL+'\';" class="img-circle" src="images/badges/logo_'+obj.data[i].ID+'.jpg" alt="">';
+                row += '<img  width="200" height="200" onclick="showBadge('+ID+')" class="img-circle" src="images/badges/logo_'+obj.data[i].ID+'.jpg" alt="">';
                 row += '</a><h2>';
                 row += NAME+'</h2><br/>';
                 row += DETAIL+' (';

@@ -17,8 +17,7 @@ $m_id = $_SESSION["id"];
 if ($table_name=="MEMBER") {
   $name = clean($_POST["name"]);
   $email = clean($_POST["email"]);
-  if ($name!="" && $email!="" && email($email)) {
-    $result["data"] = "Email Wrong Format";) {
+  if ($name!="" && $email!="" && !email($email)) {
     $sql = "update MEMBER set NAME='$name', EMAIL='$email' where ID=$m_id";
     $stid = oci_parse($db_conn, $sql);
     $r = oci_execute($stid);
@@ -32,14 +31,14 @@ if ($table_name=="MEMBER") {
     }
 
   } else {
-    $result["status"] = "failed"
+    $result["status"] = "failed";
     $result["data"] = "Wrong Value";
   }
 }
 else if ($table_name=="PROFILE") {
   $check = 1;
   if (!isset($_FILES["image"])) {
-    $result["status"] = "failed"
+    $result["status"] = "failed";
     $result["data"] = "Image Invalid";
     $check = 0;
   }
@@ -48,7 +47,7 @@ else if ($table_name=="PROFILE") {
   $profile = getFileType($image["name"]);
 
   if (!in_array($profile, $CONFIG["upload"]["type"])) {
-    $result["status"] = "failed"
+    $result["status"] = "failed";
     $result["data"] = "Dont Correct data type of image";
     $check = 0;
   }
@@ -89,11 +88,11 @@ else if ($table_name=="PHOTO") {
       $result["data"] = "Image Error";
     }
   } else {
-    $result["status"] = "failed"
+    $result["status"] = "failed";
     $result["data"] = "Wrong Value";
   }
 } else {
-  $result["status"] = "failed"
+  $result["status"] = "failed";
   $result["data"] = "Wrong Option";
 }
 

@@ -50,12 +50,27 @@ $COLUMN2["TAG"] = "M_ID";
 $COLUMN2["PHOTO"] = "OWNER_ID";
 
 $table_name = strtoupper($option);
-$curr_table = array("BADGE_COLLECT", "BADGE_LOCATION", "BADGE_MEMBER", "BADGE_THING", "BADGE_TIMING", "COMMENT_PHOTO", "LIKE_PHOTO", "PHOTO_WITH", "TAG", "PHOTO");
+$curr_table = array("BADGE_COLLECT", "BADGE_LOCATION", "BADGE_MEMBER", "BADGE_THING", "BADGE_TIMING", "COMMENT_PHOTO", "LIKE_PHOTO", "PHOTO_WITH", "TAG");
 if (in_array($table_name, $curr_table)) {
   $col = $COLUMN[$table_name];
   $tal = $TABLE[$table_name];
   $col2 = $COLUMN2[$table_name];
   $sql = "select * from $table_name a, $tal b where a.$col=$id and a.$col2=b.id";
+  $stid = oci_parse($db_conn, $sql);
+  $r = oci_execute($stid);
+  if ($r) {
+    oci_fetch_all($stid, $result["data"], null, null, OCI_FETCHSTATEMENT_BY_ROW);
+    $result["status"] = "success";
+  } else {
+    $e = oci_error($stid);
+    $result["status"] = "failed";
+    $result["data"] = $e["message"];
+  }
+} else if ($table_name=="PHOTO") {
+  $col = $COLUMN[$table_name];
+  $tal = $TABLE[$table_name];
+  $col2 = $COLUMN2[$table_name];
+  $sql = "select a.*, b.username, b.name from $table_name a, $tal b where a.$col=$id and a.$col2=b.id";
   $stid = oci_parse($db_conn, $sql);
   $r = oci_execute($stid);
   if ($r) {

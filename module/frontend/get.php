@@ -38,7 +38,7 @@ if (in_array($table_name, $curr_table)) {
   }
 }
 else if ($table_name=="PHOTO") {
-  $sql = "select * from (select a.*, ROWNUM rnum from (select * from $table_name order by id) a where rownum <= $end) where rnum >= $start";
+  $sql = "select * from (select a.*, ROWNUM rnum from (select * from $table_name order by DATE_TIME DESC) a where rownum <= $end) where rnum >= $start";
   $stid = oci_parse($db_conn, $sql);
   $r = oci_execute($stid);
   if ($r) {
@@ -50,9 +50,9 @@ else if ($table_name=="PHOTO") {
       $id = $result["data"]["$i"]["ID"];
       $owner = $result["data"]["$i"]["OWNER_ID"];
       $loc_id = $result["data"]["$i"]["LOC_ID"];
-      $timing_id = $result["data"]["$i"]["LOC_ID"];
-      $pos_id = $result["data"]["$i"]["LOC_ID"];
-      $thing_id = $result["data"]["$i"]["LOC_ID"];
+      $timing_id = $result["data"]["$i"]["TIMING_ID"];
+      $pos_id = $result["data"]["$i"]["POS_ID"];
+      $thing_id = $result["data"]["$i"]["THING_ID"];
 
       $sql = "select ID, NAME from LOCATION where ID=$loc_id";
       $stid = oci_parse($db_conn, $sql);
@@ -78,7 +78,7 @@ else if ($table_name=="PHOTO") {
       $stid = oci_parse($db_conn, $sql);
       $r = oci_execute($stid);
       oci_fetch_all($stid, $result["data"][$i]["owner"], null, null, OCI_FETCHSTATEMENT_BY_ROW);
-      $sql = "select b.ID M_ID, b.USERNAME, a.ID C_ID, a.MSG, a.DATE_TIME from COMMENT_PHOTO a, MEMBER b where a.P_ID=$id and a.M_ID=b.ID";
+      $sql = "select b.ID M_ID, b.USERNAME, b.PROFILE, a.ID C_ID, a.MSG, a.DATE_TIME from COMMENT_PHOTO a, MEMBER b where a.P_ID=$id and a.M_ID=b.ID";
       $stid = oci_parse($db_conn, $sql);
       $r = oci_execute($stid);
       oci_fetch_all($stid, $result["data"][$i]["comment"], null, null, OCI_FETCHSTATEMENT_BY_ROW);
@@ -96,39 +96,55 @@ else if ($table_name=="PHOTO") {
       $result["status"] = "success";
     }
   } else {
+    $e = oci_error($stid);
     $result["status"] = "failed";
     $result["data"] = $e["message"];
   }
 }
 else if($table_name=="MEMBER") {
-  if (!isset($_GET["id"])) $id = $m_id;
-  else $id = $_GET["id"];
+  if (isset($_GET["all"])) {
+    $sql = "select * from MEMBER";
+    $stid = oci_parse($db_conn, $sql);
+    $r = oci_execute($stid);
 
-  $sql = "select * from MEMBER where ID=$id";
-  $stid = oci_parse($db_conn, $sql);
-  $r = oci_execute($stid);
-
-  if ($r) {
     oci_fetch_all($stid, $result["data"], null, null, OCI_FETCHSTATEMENT_BY_ROW);
     $result["status"] = "success";
-
-    $sql = "select * from MESSAGE where M_ID1=$id or M_ID2=$id";
-    $stid = oci_parse($db_conn, $sql);
-    $r = oci_execute($stid);
-    oci_fetch_all($stid, $result["data"]["message"], null, null, OCI_FETCHSTATEMENT_BY_ROW);
-
-    $sql = "select BADGE_ID from BADGE_COLLECT where MEMBER_ID=$id";
-    $stid = oci_parse($db_conn, $sql);
-    $r = oci_execute($stid);
-    oci_fetch_all($stid, $result["data"]["badge"], null, null, OCI_FETCHSTATEMENT_BY_ROW);
-
-    $sql = "select * from PHOTO where OWNER_ID=$id";
-    $stid = oci_parse($db_conn, $sql);
-    $r = oci_execute($stid);
-    oci_fetch_all($stid, $result["data"]["photo"], null, null, OCI_FETCHSTATEMENT_BY_ROW);
   } else {
-    $result["status"] = "failed";
-    $result["data"] = $e["message"];
+    if (!isset($_GET["id"])) $id = $m_id;
+    else $id = $_GET["id"];
+
+    $sql = "select * from MEMBER where ID=$id";
+    $stid = oci_parse($db_conn, $sql);
+    $r = oci_execute($stid);
+
+    if ($r) {
+      oci_fetch_all($stid, $result["data"], null, null, OCI_FETCHSTATEMENT_BY_ROW);
+      $result["status"] = "success";
+
+      $sql = "select a.*, b.username, b.profile from MESSAGE a, MEMBER b where a.M_ID2=$id and a.M_ID1=b.ID";
+      $stid = oci_parse($db_conn, $sql);
+      $r = oci_execute($stid);
+      oci_fetch_all($stid, $result["data"]["message"], null, null, OCI_FETCHSTATEMENT_BY_ROW);
+
+      $sql = "select BADGE_ID from BADGE_COLLECT where MEMBER_ID=$id";
+      $stid = oci_parse($db_conn, $sql);
+      $r = oci_execute($stid);
+      oci_fetch_all($stid, $result["data"]["badge"], null, null, OCI_FETCHSTATEMENT_BY_ROW);
+
+      $sql = "select * from PHOTO where OWNER_ID=$id";
+      $stid = oci_parse($db_conn, $sql);
+      $r = oci_execute($stid);
+      oci_fetch_all($stid, $result["data"]["photo"], null, null, OCI_FETCHSTATEMENT_BY_ROW);
+
+      if (!isset($_GET["id"])) {
+        $sql = "update MEMBER set IS_UNREAD='f' where ID=$m_id";
+        $stid = oci_parse($db_conn, $sql);
+        $r = oci_execute($stid);
+      }
+    } else {
+      $result["status"] = "failed";
+      $result["data"] = $e["message"];
+    }
   }
 }
 else if($table_name=="BADGE") {
@@ -166,10 +182,9 @@ else if($table_name=="BADGE") {
       $stid = oci_parse($db_conn, $sql);
       $r = oci_execute($stid);
       oci_fetch_all($stid, $result["data"][$i]["location"], null, null, OCI_FETCHSTATEMENT_BY_ROW);
-
-      $result["status"] = "success";
     }
   } else {
+    $e = oci_error($stid);
     $result["status"] = "failed";
     $result["data"] = $e["message"];
   }
@@ -182,6 +197,7 @@ else if($table_name=="TOPUSER") {
     $result["status"] = "success";
     oci_fetch_all($stid, $result["data"], null, null, OCI_FETCHSTATEMENT_BY_ROW);
   } else {
+    $e = oci_error($stid);
     $result["status"] = "failed";
     $result["data"] = $e["message"];
   }

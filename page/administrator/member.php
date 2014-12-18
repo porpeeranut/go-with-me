@@ -31,7 +31,7 @@
 
 <script>
     var start = 0;
-    var n = 8;
+    var n = 800;
 	$(document).ready(function(){
         $.get("module/administrator/get.php?option=member&s=0&n="+n, function(result) {
             var obj = jQuery.parseJSON(result);
@@ -78,7 +78,7 @@
                 row += '<td>'+name+'</td>'
                 row += '<td>'+email+'</td>'
                 row += '<td>'+score+'</td>'
-                row += '<td><button id="btn_view" class="btn btn-xs" onclick="window.document.location=\'admin.php?option=member_detail&ID='+id+'&USERNAME='+user+'&NAME='+name+'&EMAIL='+email+'&ALL_SCORE='+score+'&PROFILE='+profile+'\';">View</button>  ';
+                row += '<td><button id="btn_view" class="btn btn-xs" onclick="window.document.location=\'admin.php?option=member_detail&ID='+id+'\';">View</button>  ';
                 row += '<button id="btn_delete_'+i+'" class="btn btn-xs">Delete</button></td></tr>';
             }
             init_table('#tb_show tbody', '<tr><th>ID</th><th>USERNAME</th><th>NAME</th><th>EMAIL</th><th>SCORE</th><th>OPTION</th></tr>');

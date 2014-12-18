@@ -23,3 +23,20 @@
 	font-size: 12px;
 	margin-bottom: 20px;
 }
+
+.mar-search {
+	margin-left: 10px;
+}
+
+.btn-right {
+	position: fixed;
+  right: 20px;
+}
+
+.table-badge td {
+	padding: 15px;
+}
+
+.msg {
+	color: red;
+}

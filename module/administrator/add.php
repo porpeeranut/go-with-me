@@ -143,12 +143,59 @@ if ($option=="badge") {
   }
 } else {
   $table_name = strtoupper($option);
-  $curr_table = array("LOCATION", "TIMING", "POSTURE", "THING");
+  $curr_table = array("TIMING", "POSTURE", "THING");
   if (in_array($table_name, $curr_table)) {
     $name = $_POST["name"];
     $detail = $_POST["detail"];
-
+    /*echo $name;
+    echo "<br>";
+    echo $detail;*/
     $sql = "insert into $table_name values (".$option."_seq.nextval, '$name', '$detail')";
+    $stid = oci_parse($db_conn, $sql);
+    $r = oci_execute($stid);
+
+    if ($r) {
+      $target_dir = $CONFIG["path"]["root"]."/".$CONFIG["image"][$option];
+
+      $stid = oci_parse($db_conn, "SELECT * FROM $table_name where name='$name'");
+      oci_execute($stid);
+      $row = oci_fetch_assoc($stid);
+      $id = $row['ID'];
+
+      $up = 1;
+
+      $type = getFileType($_FILES["ex_pic"]["name"]);
+      if (in_array($type, $CONFIG["upload"]["type"])) {
+        $ex = $target_dir.$id.".".$type;
+        if (!move_uploaded_file($_FILES["ex_pic"]["tmp_name"],$ex)) {
+          $up = 0;
+        }
+      } else {
+        $up = 0;
+      }
+
+      if ($up) {
+        $result["status"] = "success";
+        $result["data"] = "";
+      } else {
+        $result["status"] = "failed";
+        $result["data"] = "Upload image Error";
+      }
+    } else {
+      $e = oci_error($stid);
+      $result["status"] = "failed";
+      $result["data"] = $e["message"];
+    }
+  }
+  else if($table_name=="LOCATION") {
+    $name = $_POST["name"];
+    $detail = $_POST["detail"];
+    $lat = $_POST["lat"];
+    $lng = $_POST["lng"];
+    /*echo $name;
+    echo "<br>";
+    echo $detail;*/
+    $sql = "insert into $table_name values (".$option."_seq.nextval, '$name', '$detail', '$lat', '$lng')";
     $stid = oci_parse($db_conn, $sql);
     $r = oci_execute($stid);
 
